@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  position: relative;
+}
+
+h1 {
+  color: #ff4d6d;
+}
+
+.buttons {
+  margin-top: 30px;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+}
+
+#noBtn {
+  background: #999;
+  color: white;
+  position: absolute;
+}
+
+#msg {
+  margin-top: 30px;
+  font-size: 22px;
+  color: #ff4d6d;
+}
