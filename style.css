@@ -1,34 +1,35 @@
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body {
   margin: 0;
   height: 100vh;
-  background: linear-gradient(135deg, #ff4d6d, #ff8fab);
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Card */
+/* Main card */
 .card {
-  background: white;
-  padding: 40px;
-  border-radius: 25px;
-  text-align: center;
+  background: #fff;
+  padding: 45px;
+  border-radius: 20px;
   width: 340px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
 }
 
 h1 {
-  color: #ff4d6d;
+  color: #c2185b;
+  margin-bottom: 8px;
 }
 
 .sub {
-  color: #666;
-  margin-bottom: 30px;
+  color: #777;
+  margin-bottom: 35px;
 }
 
 /* Buttons */
@@ -36,21 +37,20 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
 #yesBtn {
-  padding: 14px 30px;
+  padding: 14px 36px;
   font-size: 18px;
+  border-radius: 40px;
   border: none;
-  border-radius: 50px;
-  background: linear-gradient(135deg, #ff4d6d, #ff758f);
+  background: linear-gradient(135deg, #ec407a, #f06292);
   color: white;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
-.no-box {
+.no-area {
   width: 120px;
   height: 60px;
   position: relative;
@@ -58,11 +58,12 @@ h1 {
 
 #noBtn {
   position: absolute;
-  padding: 14px 30px;
+  padding: 14px 36px;
   font-size: 18px;
+  border-radius: 40px;
   border: none;
-  border-radius: 50px;
-  background: #ccc;
+  background: #ddd;
+  color: #444;
   cursor: pointer;
 }
 
@@ -70,38 +71,54 @@ h1 {
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.5);
   display: none;
   justify-content: center;
   align-items: center;
 }
 
-.popup-content {
+.popup-box {
   background: white;
-  padding: 30px;
+  padding: 35px;
   border-radius: 20px;
   text-align: center;
-  animation: pop 0.5s ease;
+  width: 300px;
+  animation: fadeIn 0.4s ease;
 }
 
-.popup-content img {
-  width: 120px;
+.popup-box h2 {
+  color: #c2185b;
+  margin-bottom: 5px;
 }
 
-.popup-content h2 {
-  color: #ff4d6d;
-  margin-top: 15px;
+.popup-box p {
+  color: #666;
 }
 
-.close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 24px;
+.popup-box button {
+  margin-top: 20px;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 30px;
+  background: #ec407a;
+  color: white;
   cursor: pointer;
 }
 
-@keyframes pop {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.heart {
+  font-size: 48px;
+  color: #e91e63;
+  animation: pulse 1.2s infinite;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
