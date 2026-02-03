@@ -2,14 +2,17 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const result = document.getElementById("result");
 
-noBtn.addEventListener("mouseover", () => {
-  const x = Math.random() * 200;
-  const y = Math.random() * 50;
+noBtn.addEventListener("mouseenter", () => {
+  const maxX = 160;
+  const maxY = 40;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 });
 
 yesBtn.addEventListener("click", () => {
-  result.innerHTML = "This was great 💖🥰";
+  result.textContent = "This was great 💖🥰";
 });
