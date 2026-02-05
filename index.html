@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
+    <title>For Harsh ❤️</title>
     <style>
         /* --- CSS STYLES --- */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
@@ -24,7 +24,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Prevents scrollbars when button moves */
+            overflow: hidden; 
         }
 
         @keyframes gradientBG {
@@ -109,7 +109,7 @@
         #noBtn {
             background: #e0e0e0;
             color: #333;
-            position: relative; /* Starts relative, becomes absolute on hover */
+            position: relative; 
         }
 
         /* Hidden Success Message */
@@ -135,7 +135,6 @@
             pointer-events: none;
             z-index: 99;
         }
-
     </style>
 </head>
 <body>
@@ -149,7 +148,9 @@
                 <div class="gif-container">
                     <img id="mainGif" src="https://media.tenor.com/fTTVgygNCu8AAAAi/bear-blow-kiss.gif" alt="Cute Bear">
                 </div>
-                <h1>Do you love me? 💘</h1>
+                
+                <h1>Do you love Harsh? 💘</h1>
+                
                 <p class="sub">Think carefully before answering... 😌</p>
 
                 <div class="buttons">
@@ -178,37 +179,31 @@
 
         // Logic to make the NO button run away
         function moveButton() {
-            // Get viewport dimensions
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            
-            // Get button dimensions
             const btnWidth = noBtn.offsetWidth;
             const btnHeight = noBtn.offsetHeight;
 
-            // Calculate random position but keep it within the screen
-            // padding of 20px to prevent it sticking to the edge
+            // Calculate random position
             const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20;
             const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
 
             // Apply new position
-            noBtn.style.position = 'fixed'; // Change to fixed to escape the card
+            noBtn.style.position = 'fixed'; 
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
-        // Trigger move on hover (Desktop) and touch (Mobile)
         noBtn.addEventListener("mouseenter", moveButton);
         noBtn.addEventListener("touchstart", moveButton);
 
-        // Success Logic
         yesBtn.addEventListener("click", () => {
-            questionBox.style.display = "none"; // Hide question
-            successMessage.style.display = "flex"; // Show success
-            startConfetti(); // Boom!
+            questionBox.style.display = "none"; 
+            successMessage.style.display = "flex"; 
+            startConfetti(); 
         });
 
-        /* --- CONFETTI ENGINE (Pure JS) --- */
+        /* --- CONFETTI ENGINE --- */
         const canvas = document.getElementById("confetti");
         const ctx = canvas.getContext("2d");
         let particles = [];
@@ -242,13 +237,10 @@
                 p.x += p.dx;
                 p.y += p.dy;
                 p.dy += p.gravity;
-                
                 ctx.fillStyle = p.color;
                 ctx.fillRect(p.x, p.y, p.w, p.h);
-
                 if (p.y > canvas.height) particles.splice(index, 1);
             });
-
             if (particles.length > 0) requestAnimationFrame(animateConfetti);
         }
     </script>
