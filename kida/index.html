@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harsh's Tank Defender 🛡️</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            user-select: none;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            pointer-events: none;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #4ade80;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        p {
+            margin: 5px 0 0;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        #score-board {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        }
+
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <h1>HARSH'S TANK DEFENDER</h1>
+        <p>WASD to Move | Mouse to Aim & Shoot</p>
+        <div id="score-board">Score: 0 | Wave: 1</div>
+        <div style="margin-top: 10px; color: #ef4444; font-weight: bold;" id="health-display">Health: 100%</div>
+    </div>
+
+    <div id="game-over">
+        <h1 style="color: #ef4444; font-size: 40px;">MISSION FAILED</h1>
+        <p id="final-score">You killed 0 insects.</p>
+        <button onclick="location.reload()">RETRY MISSION</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Full Screen Canvas
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Game State
+        let score = 0;
+        let wave = 1;
+        let gameActive = true;
+        let frame = 0;
+
+        // Inputs
+        const keys = { w: false, a: false, s: false, d: false };
+        const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'w' || e.key === 'W') keys.w = true;
+            if (e.key === 'a' || e.key === 'A') keys.a = true;
+            if (e.key === 's' || e.key === 'S') keys.s = true;
+            if (e.key === 'd' || e.key === 'D') keys.d = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'w' || e.key === 'W') keys.w = false;
+            if (e.key === 'a' || e.key === 'A') keys.a = false;
+            if (e.key === 's' || e.key === 'S') keys.s = false;
+            if (e.key === 'd' || e.key === 'D') keys.d = false;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mousedown', () => {
+            if(gameActive) player.shoot();
+        });
+
+        // Classes
+        class Player {
+            constructor() {
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                this.radius = 20;
+                this.color = '#3b82f6'; // Tank Blue
+                this.speed = 4;
+                this.health = 100;
+            }
+
+            update() {
+                if (keys.w && this.y > this.radius) this.y -= this.speed;
+                if (keys.s && this.y < canvas.height - this.radius) this.y += this.speed;
+                if (keys.a && this.x > this.radius) this.x -= this.speed;
+                if (keys.d && this.x < canvas.width - this.radius) this.x += this.speed;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Calculate angle to mouse
+                const angle = Math.atan2(mouse.y - this.y, mouse.x - this.x);
+                ctx.rotate(angle);
+
+                // Tank Body
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-20, -20, 40, 40);
+                
+                // Tank Outline
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(-20, -20, 40, 40);
+
+                // Turret
+                ctx.fillStyle = '#60a5fa';
+                ctx.fillRect(0, -8, 35, 16);
+
+                // Center Hub
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                ctx.fillStyle = '#1e3a8a';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            shoot() {
+                const angle = Math.atan2(mouse.y - this.y, mouse.x - this.x);
+                const velocity = {
+                    x: Math.cos(angle) * 10,
+                    y: Math.sin(angle) * 10
+                };
+                bullets.push(new Bullet(this.x, this.y, velocity));
+            }
+        }
+
+        class Bullet {
+            constructor(x, y, velocity) {
+                this.x = x;
+                this.y = y;
+                this.velocity = velocity;
+                this.radius = 5;
+            }
+
+            update() {
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#facc15'; // Yellow laser
+                ctx.fill();
+            }
+        }
+
+        class Enemy {
+            constructor() {
+                // Spawn randomly on edges
+                if (Math.random() < 0.5) {
+                    this.x = Math.random() < 0.5 ? 0 - 30 : canvas.width + 30;
+                    this.y = Math.random() * canvas.height;
+                } else {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() < 0.5 ? 0 - 30 : canvas.height + 30;
+                }
+
+                this.radius = 15 + Math.random() * 10; // Random size
+                this.color = '#4ade80'; // Insect Green
+                
+                // Speed increases with waves
+                this.speed = (Math.random() * 1.5 + 1) + (wave * 0.2); 
+            }
+
+            update() {
+                const angle = Math.atan2(player.y - this.y, player.x - this.x);
+                this.x += Math.cos(angle) * this.speed;
+                this.y += Math.sin(angle) * this.speed;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                const angle = Math.atan2(player.y - this.y, player.x - this.x);
+                ctx.rotate(angle);
+
+                // Insect Body
+                ctx.beginPath();
+                ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.strokeStyle = '#14532d';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Eyes
+                ctx.fillStyle = 'red';
+                ctx.beginPath();
+                ctx.arc(5, -5, 3, 0, Math.PI * 2);
+                ctx.arc(5, 5, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Legs (Simple lines)
+                ctx.strokeStyle = '#4ade80';
+                ctx.lineWidth = 2;
+                
+                // Wiggle effect
+                let wiggle = Math.sin(frame * 0.2) * 5;
+
+                ctx.beginPath(); // Top leg
+                ctx.moveTo(0, -this.radius);
+                ctx.lineTo(-10, -this.radius - 10 + wiggle);
+                ctx.stroke();
+
+                ctx.beginPath(); // Bottom leg
+                ctx.moveTo(0, this.radius);
+                ctx.lineTo(-10, this.radius + 10 - wiggle);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.friction = 0.96;
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.03;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Arrays
+        const player = new Player();
+        let bullets = [];
+        let enemies = [];
+        let particles = [];
+
+        // Game Functions
+        function spawnEnemies() {
+            // Difficulty logic: Spawn faster as score increases
+            let spawnRate = 100 - (score * 0.5); 
+            if (spawnRate < 20) spawnRate = 20;
+
+            if (frame % Math.floor(spawnRate) === 0) {
+                enemies.push(new Enemy());
+            }
+
+            // Increase Wave every 20 kills
+            if (score > 0 && score % 20 === 0) {
+                wave = Math.floor(score / 20) + 1;
+            }
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 8; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate() {
+            if (!gameActive) return;
+
+            requestAnimationFrame(animate);
+            frame++;
+            
+            // Clear Screen with slight trail for motion blur effect
+            ctx.fillStyle = 'rgba(26, 26, 26, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update UI
+            document.getElementById('score-board').innerText = `Score: ${score} | Wave: ${wave}`;
+            document.getElementById('health-display').innerText = `Health: ${player.health}%`;
+
+            player.update();
+            player.draw();
+
+            // Particles
+            particles.forEach((particle, index) => {
+                if (particle.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    particle.update();
+                    particle.draw();
+                }
+            });
+
+            // Bullets
+            bullets.forEach((bullet, bIndex) => {
+                bullet.update();
+                bullet.draw();
+
+                // Remove off-screen bullets
+                if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+                    setTimeout(() => bullets.splice(bIndex, 1), 0);
+                }
+            });
+
+            // Enemies
+            spawnEnemies();
+            enemies.forEach((enemy, eIndex) => {
+                enemy.update();
+                enemy.draw();
+
+                // Check collision with Player (Hurt us)
+                const distPlayer = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+                if (distPlayer - enemy.radius - player.radius < 1) {
+                    player.health -= 20; // Take damage
+                    createExplosion(enemy.x, enemy.y, '#ef4444'); // Red blood for player hurt
+                    enemies.splice(eIndex, 1);
+
+                    if (player.health <= 0) {
+                        endGame();
+                    }
+                }
+
+                // Check collision with Bullets (Kill them)
+                bullets.forEach((bullet, bIndex) => {
+                    const distBullet = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
+                    
+                    if (distBullet - enemy.radius < 1) {
+                        // Kill Enemy
+                        createExplosion(enemy.x, enemy.y, '#4ade80'); // Green goo
+                        score++;
+                        
+                        setTimeout(() => {
+                            enemies.splice(eIndex, 1);
+                            bullets.splice(bIndex, 1);
+                        }, 0);
+                    }
+                });
+            });
+        }
+
+        function endGame() {
+            gameActive = false;
+            document.getElementById('game-over').style.display = 'block';
+            document.getElementById('final-score').innerText = `You defended against ${score} insects!`;
+        }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+        });
+
+        // Start
+        animate();
+
+    </script>
+</body>
+</html>
