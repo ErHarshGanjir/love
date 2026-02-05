@@ -1,26 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>For Love ❤️</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <style>
+        /* --- CSS STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            /* A softer, more romantic gradient */
+            background: linear-gradient(115deg, #f9ce34, #ee2a7b, #6228d7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevents scrollbars when button moves */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .gif-container img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        p.sub {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* YES Button */
+        #yesBtn {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background: #ff2a55;
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+        }
+
+        /* NO Button */
+        #noBtn {
+            background: #e0e0e0;
+            color: #333;
+            position: relative; /* Starts relative, becomes absolute on hover */
+        }
+
+        /* Hidden Success Message */
+        #success-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #success-message h2 {
+            color: #ff4d6d;
+            font-size: 2.5rem;
+            margin-top: 20px;
+        }
+
+        /* Confetti Canvas */
+        #confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+    </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Do you love me? 💘</h1>
-    <p class="sub">Think carefully 😌</p>
+    <canvas id="confetti"></canvas>
 
-    <div class="buttons">
-      <button id="yesBtn">YES 💖</button>
-      <div class="no-box">
-        <button id="noBtn">NO 😅</button>
-      </div>
+    <div class="container">
+        <div class="card">
+            
+            <div id="question-box">
+                <div class="gif-container">
+                    <img id="mainGif" src="https://media.tenor.com/fTTVgygNCu8AAAAi/bear-blow-kiss.gif" alt="Cute Bear">
+                </div>
+                <h1>Do you love me? 💘</h1>
+                <p class="sub">Think carefully before answering... 😌</p>
+
+                <div class="buttons">
+                    <button id="yesBtn">YES 💖</button>
+                    <button id="noBtn">NO 😅</button>
+                </div>
+            </div>
+
+            <div id="success-message">
+                <div class="gif-container">
+                    <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Happy Bear">
+                </div>
+                <h2>Yay! I knew it! 💖🥰</h2>
+                <p class="sub">Best decision ever!</p>
+            </div>
+
+        </div>
     </div>
 
-    <div id="result"></div>
-  </div>
+    <script>
+        /* --- JAVASCRIPT --- */
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const questionBox = document.getElementById("question-box");
+        const successMessage = document.getElementById("success-message");
 
-  <script src="script.js"></script>
+        // Logic to make the NO button run away
+        function moveButton() {
+            // Get viewport dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Get button dimensions
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // Calculate random position but keep it within the screen
+            // padding of 20px to prevent it sticking to the edge
+            const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20;
+            const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
+
+            // Apply new position
+            noBtn.style.position = 'fixed'; // Change to fixed to escape the card
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Trigger move on hover (Desktop) and touch (Mobile)
+        noBtn.addEventListener("mouseenter", moveButton);
+        noBtn.addEventListener("touchstart", moveButton);
+
+        // Success Logic
+        yesBtn.addEventListener("click", () => {
+            questionBox.style.display = "none"; // Hide question
+            successMessage.style.display = "flex"; // Show success
+            startConfetti(); // Boom!
+        });
+
+        /* --- CONFETTI ENGINE (Pure JS) --- */
+        const canvas = document.getElementById("confetti");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function startConfetti() {
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    dx: Math.random() * 10 - 5,
+                    dy: Math.random() * 10 - 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    gravity: 0.1
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.x += p.dx;
+                p.y += p.dy;
+                p.dy += p.gravity;
+                
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+
+                if (p.y > canvas.height) particles.splice(index, 1);
+            });
+
+            if (particles.length > 0) requestAnimationFrame(animateConfetti);
+        }
+    </script>
 </body>
 </html>
