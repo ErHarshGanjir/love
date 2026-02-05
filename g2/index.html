@@ -2,124 +2,191 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Speed Runner</title>
+<title>Car Simulator 2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
 
 <style>
-body{
-    margin:0;
-    background:#111;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    font-family:Arial, Helvetica, sans-serif;
+body{margin:0;overflow:hidden;background:#000;font-family:Arial}
+#ui{
+ position:fixed;bottom:10px;left:50%;
+ transform:translateX(-50%);
+ display:flex;flex-wrap:wrap;gap:8px;z-index:10
 }
-canvas{
-    background:linear-gradient(#222,#000);
-    border:4px solid #00ffcc;
+button{
+ min-width:48px;min-height:48px;
+ border:none;border-radius:8px;
+ background:#222;color:#fff;font-size:14px
 }
 #info{
-    position:absolute;
-    top:10px;
-    color:white;
-    font-size:18px;
+ position:fixed;top:8px;left:8px;
+ color:#fff;font-size:12px;z-index:10
 }
 </style>
 </head>
 
 <body>
 
-<div id="info">⬆ Jump | Score: <span id="score">0</span></div>
-<canvas id="game" width="800" height="400"></canvas>
+<div id="info">
+💰 Unlimited | 💪 Max Fitness | 🚗 Cars | 🔥 Drift | 🚓 Traffic
+</div>
+
+<div id="ui">
+<button ontouchstart="gas=1" ontouchend="gas=0">▲</button>
+<button ontouchstart="brake=1" ontouchend="brake=0">▼</button>
+<button ontouchstart="left=1" ontouchend="left=0">◀</button>
+<button ontouchstart="right=1" ontouchend="right=0">▶</button>
+<button onclick="switchCar()">CAR</button>
+<button onclick="randomColor()">COLOR</button>
+<button onclick="toggleDrift()">DRIFT</button>
+<button onclick="nitro()">NITRO</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-const scoreEl = document.getElementById("score");
+/* ============ RENDERER (FAST + SCALE SAFE) ============ */
+const renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:"high-performance"});
+document.body.appendChild(renderer.domElement);
 
-let player = { x:50, y:300, w:40, h:40, dy:0, jump:false };
-let gravity = 0.6;
-let obstacles = [];
-let score = 0;
-let speed = 4;
-let gameOver = false;
+/* ============ SCENE & CAMERA ============ */
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x87ceeb);
+const camera=new THREE.PerspectiveCamera(70,1,0.1,2000);
 
-// Jump
-document.addEventListener("keydown", e=>{
-    if(e.code==="ArrowUp" && !player.jump){
-        player.dy = -12;
-        player.jump = true;
-    }
-});
-canvas.addEventListener("click", ()=>{
-    if(!player.jump){
-        player.dy = -12;
-        player.jump = true;
-    }
-});
+/* ============ LIGHT ============ */
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+const sun=new THREE.DirectionalLight(0xffffff,1);
+sun.position.set(200,300,100);
+scene.add(sun);
 
-function spawnObstacle(){
-    obstacles.push({x:800,y:320,w:30,h:30});
+/* ============ WORLD ============ */
+const ground=new THREE.Mesh(
+ new THREE.PlaneGeometry(2000,2000),
+ new THREE.MeshStandardMaterial({color:0x444444})
+);
+ground.rotation.x=-Math.PI/2;
+scene.add(ground);
+
+/* ============ CARS ============ */
+let cars=[];
+function createCar(color){
+ const car=new THREE.Mesh(
+  new THREE.BoxGeometry(4,1.8,2),
+  new THREE.MeshStandardMaterial({color})
+ );
+ car.position.y=1;
+ car.userData={
+  v:0,
+  max:1.3,
+  accel:0.03,
+  brake:0.06,
+  friction:0.985,
+  steer:0,
+  steerLim:0.04,
+  grip:0.95
+ };
+ scene.add(car);
+ cars.push(car);
+}
+createCar(0xff0000);
+createCar(0x00ff00);
+createCar(0x0000ff);
+
+cars.forEach(c=>c.visible=false);
+let currentCar=0;
+cars[0].visible=true;
+
+/* ============ TRAFFIC (SIMPLE) ============ */
+let traffic=[];
+for(let i=0;i<10;i++){
+ const t=new THREE.Mesh(
+  new THREE.BoxGeometry(3,1.5,2),
+  new THREE.MeshStandardMaterial({color:0x999999})
+ );
+ t.position.set(Math.random()*600-300,1,Math.random()*600-300);
+ t.userData.speed=Math.random()*0.3+0.1;
+ scene.add(t);
+ traffic.push(t);
 }
 
-function reset(){
-    obstacles=[];
-    score=0;
-    speed=4;
-    gameOver=false;
+/* ============ INPUT ============ */
+let gas=0,brake=0,left=0,right=0;
+let drift=false;
+
+/* ============ CAMERA START ============ */
+camera.position.set(0,6,10);
+
+/* ============ FUNCTIONS ============ */
+function switchCar(){
+ cars[currentCar].visible=false;
+ currentCar=(currentCar+1)%cars.length;
+ cars[currentCar].visible=true;
+}
+function randomColor(){
+ cars[currentCar].material.color.set(Math.random()*0xffffff);
+}
+function nitro(){
+ cars[currentCar].userData.v+=0.5;
+}
+function toggleDrift(){
+ drift=!drift;
 }
 
-function update(){
-    if(gameOver) return;
+/* ============ MAIN LOOP (PHYSICS) ============ */
+function animate(){
+ requestAnimationFrame(animate);
 
-    ctx.clearRect(0,0,800,400);
+ const car=cars[currentCar];
+ const p=car.userData;
 
-    // Player
-    player.dy += gravity;
-    player.y += player.dy;
+ // acceleration
+ if(gas)   p.v+=p.accel*(1-p.v/p.max);
+ if(brake) p.v-=p.brake;
 
-    if(player.y>=300){
-        player.y=300;
-        player.dy=0;
-        player.jump=false;
-    }
+ // friction
+ p.v*=p.friction;
+ p.v=Math.max(-0.6,Math.min(p.v,p.max));
 
-    ctx.fillStyle="#00ffcc";
-    ctx.fillRect(player.x,player.y,player.w,player.h);
+ // steering
+ if(left)  p.steer+=p.steerLim;
+ if(right) p.steer-=p.steerLim;
 
-    // Obstacles
-    for(let i=0;i<obstacles.length;i++){
-        obstacles[i].x -= speed;
-        ctx.fillStyle="#ff4444";
-        ctx.fillRect(obstacles[i].x,obstacles[i].y,obstacles[i].w,obstacles[i].h);
+ let grip=drift?0.75:p.grip;
+ p.steer*=grip;
 
-        // Collision
-        if(
-            player.x < obstacles[i].x + obstacles[i].w &&
-            player.x + player.w > obstacles[i].x &&
-            player.y < obstacles[i].y + obstacles[i].h &&
-            player.y + player.h > obstacles[i].y
-        ){
-            gameOver = true;
-            alert("Game Over! Score: " + score);
-            reset();
-        }
-    }
+ // move
+ car.rotation.y+=p.steer*Math.abs(p.v);
+ car.position.x+=Math.sin(car.rotation.y)*p.v;
+ car.position.z+=Math.cos(car.rotation.y)*p.v;
 
-    obstacles = obstacles.filter(o=>o.x>-50);
+ // camera
+ camera.position.lerp(
+  new THREE.Vector3(car.position.x,car.position.y+6,car.position.z+10),
+  0.1
+ );
+ camera.lookAt(car.position);
 
-    // Score
-    score++;
-    scoreEl.innerText = score;
+ // traffic move
+ traffic.forEach(t=>{
+  t.position.z+=t.userData.speed;
+  if(t.position.z>500) t.position.z=-500;
+ });
 
-    if(score%200===0) speed+=0.5;
-
-    requestAnimationFrame(update);
+ renderer.render(scene,camera);
 }
+animate();
 
-setInterval(spawnObstacle,1500);
-update();
+/* ============ SCALE FIX ============ */
+function resize(){
+ const w=innerWidth,h=innerHeight;
+ camera.aspect=w/h;
+ camera.updateProjectionMatrix();
+ renderer.setSize(w,h,false);
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+}
+window.addEventListener("resize",resize);
+resize();
 </script>
 
 </body>
