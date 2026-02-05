@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Billionaire 5D Empire: God Mode</title>
+    <style>
+        :root { --gold: #d4af37; --neon: #00f3ff; --danger: #ff0044; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; touch-action: none; }
+        canvas { display: block; position: absolute; top: 0; left: 0; }
+        
+        /* Premium Billionaire HUD */
+        #hud {
+            position: absolute; top: 15px; left: 15px; color: var(--gold);
+            background: rgba(0,0,0,0.9); padding: 15px; border: 2px solid var(--gold);
+            border-radius: 12px; box-shadow: 0 0 20px gold; pointer-events: none; z-index: 10;
+        }
+        .stat-bar { width: 140px; height: 8px; background: #222; margin: 6px 0; border-radius: 4px; overflow: hidden; }
+        .fill { height: 100%; transition: 0.3s; }
+        
+        /* Control Buttons */
+        .controls { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; z-index: 10; }
+        .btn { width: 75px; height: 75px; border: 3px solid var(--gold); border-radius: 50%; color: #fff; 
+               display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); font-weight: bold; }
+        #v-btn { position: absolute; top: 15px; right: 15px; width: 60px; height: 60px; background: var(--danger); border: none; border-radius: 50%; color: #fff; font-size: 24px; box-shadow: 0 0 15px var(--danger); cursor: pointer; z-index: 10; }
+    </style>
+</head>
+<body>
+
+<div id="hud">
+    <b>👑 BOSS: <span id="boss-name">BILLIONAIRE</span></b><br>
+    CASH: $<span id="cash">1,000,000,000</span><br>
+    STAMINA: <div class="stat-bar"><div id="s-fill" class="fill" style="background:var(--neon); width:100%"></div></div>
+    MUSCLE: <div class="stat-bar"><div id="m-fill" class="fill" style="background:var(--gold); width:25%"></div></div>
+    <small id="weather-info">WEATHER: SUNNY</small> | <small id="skill-lvl">SKILL: LVL 1</small>
+</div>
+
+<button id="v-btn">🎤</button>
+
+<div class="controls">
+    <div style="display:flex; gap:15px;">
+        <div id="btn-L" class="btn">◀</div>
+        <div id="btn-R" class="btn">▶</div>
+    </div>
+    <div style="display:flex; gap:15px;">
+        <div id="btn-F" class="btn" style="border-color:red;">FIGHT</div>
+        <div id="btn-G" class="btn" style="border-color:lime;">GAS</div>
+        <div id="btn-A" class="btn" style="border-color:white;">USE</div>
+    </div>
+</div>
+
+<canvas id="game"></canvas>
+<canvas id="weather"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const wCanvas = document.getElementById("weather");
+const wCtx = wCanvas.getContext("2d");
+
+canvas.width = wCanvas.width = window.innerWidth;
+canvas.height = wCanvas.height = window.innerHeight;
+
+// --- GAME STATE ---
+let p = { 
+    x: 5000, y: 5000, a: 0, spd: 0, 
+    stm: 100, msc: 25, skl: 1, cash: 1000000000,
+    type: 'car', rain: false 
+};
+let cam = { x: 5000, y: 5000 };
+let input = {};
+let structures = [
+    {x: 5200, y: 4800, type: 'ATM', color: 'gold'},
+    {x: 4800, y: 5300, type: 'GYM', color: 'cyan'},
+    {x: 5500, y: 5500, type: 'BRIDGE', w: 2000, h: 150}
+];
+
+// --- HINDI VOICE LOGIC ---
+const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (Speech) {
+    const rec = new Speech(); rec.lang = 'hi-IN';
+    document.getElementById('v-btn').onclick = () => { rec.start(); if(navigator.vibrate) navigator.vibrate(50); };
+    rec.onresult = (e) => {
+        let cmd = e.results[0][0].transcript.toLowerCase();
+        if(cmd.includes("bike")) { p.type = 'bike'; talk("Superbike hazir hai Boss."); }
+        if(cmd.includes("car")) { p.type = 'car'; talk("Luxury car ready hai."); }
+        if(cmd.includes("barish")) { p.rain = !p.rain; talk("Mausam badal raha hai."); }
+    };
+}
+function talk(t) { 
+    let m = new SpeechSynthesisUtterance(t); m.lang = 'hi-IN'; 
+    window.speechSynthesis.speak(m); 
+    document.getElementById('boss-name').innerText = "POWERING...";
+}
+
+// --- CORE PHYSICS ENGINE ---
+function engine() {
+    // Movement & Skill-based Friction
+    if(input.G) p.spd += (p.type==='car'?0.35:0.55);
+    if(input.L) p.a -= 0.05 * (1 + p.skl/100);
+    if(input.R) p.a += 0.05 * (1 + p.skl/100);
+    
+    p.spd *= (p.rain ? 0.99 : 0.97);
+    p.x += Math.cos(p.a) * p.spd;
+    p.y += Math.sin(p.a) * p.spd;
+
+    // Interaction (ATM/GYM)
+    structures.forEach(s => {
+        let dist = Math.hypot(p.x - s.x, p.y - s.y);
+        if(dist < 70 && input.A) {
+            if(s.type === 'ATM') { p.cash += 1000000; talk("Cash withdraw ho gaya."); }
+            if(s.type === 'GYM') { p.msc += 5; p.stm = 100; talk("Muscles built! Stamina recovered."); }
+            input.A = false; // Reset trigger
+        }
+    });
+
+    // Fighting Skills
+    if(input.F) { p.stm -= 0.3; p.skl += 0.02; if(navigator.vibrate) navigator.vibrate(30); }
+
+    // Camera
+    cam.x += (p.x - canvas.width/2 - cam.x) * 0.1;
+    cam.y += (p.y - canvas.height/2 - cam.y) * 0.1;
+
+    // UI Refresh
+    document.getElementById('cash').innerText = p.cash.toLocaleString();
+    document.getElementById('s-fill').style.width = p.stm + "%";
+    document.getElementById('m-fill').style.width = p.msc + "%";
+    document.getElementById('skill-lvl').innerText = "SKILL: LVL " + Math.floor(p.skl);
+    document.getElementById('weather-info').innerText = "WEATHER: " + (p.rain ? "RAINING" : "SUNNY");
+}
+
+// --- RENDERING (5D EFFECTS) ---
+function draw() {
+    ctx.fillStyle = "#050505"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.save(); ctx.translate(-cam.x, -cam.y);
+
+    // Grid & Ground
+    ctx.strokeStyle = "#151515";
+    for(let i=0; i<10000; i+=300) { ctx.strokeRect(i,0,1,10000); ctx.strokeRect(0,i,10000,1); }
+
+    // Structures (ATM, GYM, BRIDGE)
+    structures.forEach(s => {
+        ctx.shadowBlur = 15; ctx.shadowColor = s.color || "white";
+        ctx.fillStyle = s.color || "#333";
+        if(s.type === 'BRIDGE') ctx.fillRect(s.x, s.y, s.w, s.h);
+        else { ctx.fillRect(s.x-20, s.y-20, 40, 40); ctx.fillStyle="white"; ctx.fillText(s.type, s.x-15, s.y-25); }
+    });
+
+    // BOSS PLAYER (Gold Aura)
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+    ctx.shadowBlur = 25; ctx.shadowColor = "gold";
+    ctx.fillStyle = "gold";
+    if(p.type==='car') { ctx.fillRect(-30, -18, 60, 36); ctx.fillStyle="black"; ctx.fillRect(10,-20,10,5); }
+    else { ctx.fillRect(-25, -7, 50, 14); ctx.fillStyle="black"; ctx.fillRect(15,-8,8,16); }
+    ctx.restore();
+
+    ctx.restore();
+    
+    // Rain Effect
+    if(p.rain) {
+        wCtx.clearRect(0,0,canvas.width,canvas.height);
+        wCtx.strokeStyle = "rgba(174,194,224,0.4)";
+        for(let i=0; i<50; i++) {
+            let x = Math.random()*canvas.width; let y = Math.random()*canvas.height;
+            wCtx.beginPath(); wCtx.moveTo(x,y); wCtx.lineTo(x,y+10); wCtx.stroke();
+        }
+    } else { wCtx.clearRect(0,0,canvas.width,canvas.height); }
+
+    engine(); requestAnimationFrame(draw);
+}
+
+// TOUCH CONTROLS
+const bind = (id, k) => {
+    let el = document.getElementById(id);
+    el.ontouchstart = (e) => { e.preventDefault(); input[k] = true; };
+    el.ontouchend = (e) => { e.preventDefault(); input[k] = false; };
+};
+bind('btn-L', 'L'); bind('btn-R', 'R'); bind('btn-G', 'G'); bind('btn-F', 'F'); bind('btn-A', 'A');
+
+draw();
+</script>
+</body>
+</html>
