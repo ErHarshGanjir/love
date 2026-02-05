@@ -3,180 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Billionaire 5D Empire: God Mode</title>
+    <title>Billionaire 5D: The Complete Empire</title>
     <style>
-        :root { --gold: #d4af37; --neon: #00f3ff; --danger: #ff0044; }
-        body { margin: 0; overflow: hidden; background: #000; font-family: 'Orbitron', sans-serif; touch-action: none; }
-        canvas { display: block; position: absolute; top: 0; left: 0; }
-        
-        /* Premium Billionaire HUD */
+        :root { --gold: #d4af37; --neon: #00f3ff; --road: #222; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Segoe UI', sans-serif; touch-action: none; width: 100vw; height: 100vh; color: white; }
+        canvas { display: block; position: absolute; inset: 0; }
+
+        /* HUD & UI */
         #hud {
-            position: absolute; top: 15px; left: 15px; color: var(--gold);
-            background: rgba(0,0,0,0.9); padding: 15px; border: 2px solid var(--gold);
-            border-radius: 12px; box-shadow: 0 0 20px gold; pointer-events: none; z-index: 10;
+            position: absolute; top: 10px; left: 20px; right: 20px; 
+            background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 25px;
+            display: flex; justify-content: space-between; z-index: 100; border: 1px solid var(--gold);
         }
-        .stat-bar { width: 140px; height: 8px; background: #222; margin: 6px 0; border-radius: 4px; overflow: hidden; }
-        .fill { height: 100%; transition: 0.3s; }
+
+        /* Controls */
+        .controls { position: absolute; inset: 0; pointer-events: none; z-index: 150; }
+        .zone { position: absolute; bottom: 20px; width: 35%; height: 180px; pointer-events: auto; display: flex; align-items: flex-end; }
+        .left-zone { left: 20px; gap: 15px; }
+        .right-zone { right: 20px; justify-content: flex-end; gap: 10px; }
         
-        /* Control Buttons */
-        .controls { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; z-index: 10; }
-        .btn { width: 75px; height: 75px; border: 3px solid var(--gold); border-radius: 50%; color: #fff; 
-               display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); font-weight: bold; }
-        #v-btn { position: absolute; top: 15px; right: 15px; width: 60px; height: 60px; background: var(--danger); border: none; border-radius: 50%; color: #fff; font-size: 24px; box-shadow: 0 0 15px var(--danger); cursor: pointer; z-index: 10; }
+        .btn { 
+            width: 80px; height: 80px; border: 3px solid var(--gold); border-radius: 50%; 
+            color: white; display: flex; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.5); font-weight: bold; backdrop-filter: blur(4px);
+        }
+        .gas-btn { width: 110px; height: 110px; border-color: lime; border-radius: 25px; }
+        .mini-btn { width: 55px; height: 55px; font-size: 10px; border-color: orange; }
+
+        /* Menus */
+        #menu-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .menu-card { background: #111; padding: 30px; border: 2px solid var(--gold); border-radius: 15px; text-align: center; }
+        .opt { margin: 10px; padding: 10px 20px; border: 1px solid var(--gold); cursor: pointer; }
+        .opt:hover { background: var(--gold); color: black; }
     </style>
 </head>
 <body>
 
-<div id="hud">
-    <b>👑 BOSS: <span id="boss-name">BILLIONAIRE</span></b><br>
-    CASH: $<span id="cash">1,000,000,000</span><br>
-    STAMINA: <div class="stat-bar"><div id="s-fill" class="fill" style="background:var(--neon); width:100%"></div></div>
-    MUSCLE: <div class="stat-bar"><div id="m-fill" class="fill" style="background:var(--gold); width:25%"></div></div>
-    <small id="weather-info">WEATHER: SUNNY</small> | <small id="skill-lvl">SKILL: LVL 1</small>
+<div id="menu-overlay">
+    <div class="menu-card" id="start-card">
+        <h1>🔐 BOSS ACCESS</h1>
+        <p>Biometric Scan Required</p>
+        <button onclick="startGame()" style="padding:15px 30px; background:var(--gold); border:none; font-weight:bold; border-radius:5px;">START EMPIRE</button>
+    </div>
+    <div class="menu-card" id="garage-card" style="display:none;">
+        <h1>🛠️ GARAGE</h1>
+        <div class="opt" onclick="setGear('AUTO')">AUTOMATIC</div>
+        <div class="opt" onclick="setGear('MANUAL')">MANUAL (G1-G3)</div>
+        <button onclick="closeGarage()" style="margin-top:10px;">EXIT GARAGE</button>
+    </div>
 </div>
 
-<button id="v-btn">🎤</button>
+<div id="hud">
+    <div>💰 $<span id="cash">1,000,000,000</span></div>
+    <div id="gear-ui" style="color:var(--neon)">AUTO</div>
+    <div id="loc-ui" style="color:lime;">CITY</div>
+</div>
 
 <div class="controls">
-    <div style="display:flex; gap:15px;">
+    <div class="zone left-zone">
         <div id="btn-L" class="btn">◀</div>
         <div id="btn-R" class="btn">▶</div>
     </div>
-    <div style="display:flex; gap:15px;">
-        <div id="btn-F" class="btn" style="border-color:red;">FIGHT</div>
-        <div id="btn-G" class="btn" style="border-color:lime;">GAS</div>
-        <div id="btn-A" class="btn" style="border-color:white;">USE</div>
+    <div class="zone right-zone">
+        <div id="btn-S" class="btn mini-btn" style="display:none;">SHIFT</div>
+        <div id="btn-E" class="btn mini-btn" style="border-color:red;">EXIT</div>
+        <div id="btn-G" class="btn gas-btn">RACE</div>
     </div>
 </div>
 
 <canvas id="game"></canvas>
-<canvas id="weather"></canvas>
 
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
-const wCanvas = document.getElementById("weather");
-const wCtx = wCanvas.getContext("2d");
-
-canvas.width = wCanvas.width = window.innerWidth;
-canvas.height = wCanvas.height = window.innerHeight;
-
-// --- GAME STATE ---
-let p = { 
-    x: 5000, y: 5000, a: 0, spd: 0, 
-    stm: 100, msc: 25, skl: 1, cash: 1000000000,
-    type: 'car', rain: false 
-};
-let cam = { x: 5000, y: 5000 };
+let p = { x: 5000, y: 5000, a: 0, spd: 0, inCar: true, gearMode: 'AUTO', gear: 1, rain: false };
+let carPos = { x: 5000, y: 5000, a: 0 };
 let input = {};
-let structures = [
-    {x: 5200, y: 4800, type: 'ATM', color: 'gold'},
-    {x: 4800, y: 5300, type: 'GYM', color: 'cyan'},
-    {x: 5500, y: 5500, type: 'BRIDGE', w: 2000, h: 150}
-];
 
-// --- HINDI VOICE LOGIC ---
-const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (Speech) {
-    const rec = new Speech(); rec.lang = 'hi-IN';
-    document.getElementById('v-btn').onclick = () => { rec.start(); if(navigator.vibrate) navigator.vibrate(50); };
-    rec.onresult = (e) => {
-        let cmd = e.results[0][0].transcript.toLowerCase();
-        if(cmd.includes("bike")) { p.type = 'bike'; talk("Superbike hazir hai Boss."); }
-        if(cmd.includes("car")) { p.type = 'car'; talk("Luxury car ready hai."); }
-        if(cmd.includes("barish")) { p.rain = !p.rain; talk("Mausam badal raha hai."); }
-    };
-}
-function talk(t) { 
-    let m = new SpeechSynthesisUtterance(t); m.lang = 'hi-IN'; 
-    window.speechSynthesis.speak(m); 
-    document.getElementById('boss-name').innerText = "POWERING...";
+function startGame() {
+    document.getElementById('menu-overlay').style.display = 'none';
+    if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    resize();
 }
 
-// --- CORE PHYSICS ENGINE ---
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+
+function setGear(m) {
+    p.gearMode = m;
+    p.gear = 1;
+    document.getElementById('btn-S').style.display = m === 'MANUAL' ? 'flex' : 'none';
+    closeGarage();
+}
+function closeGarage() { document.getElementById('menu-overlay').style.display = 'none'; }
+
 function engine() {
-    // Movement & Skill-based Friction
-    if(input.G) p.spd += (p.type==='car'?0.35:0.55);
-    if(input.L) p.a -= 0.05 * (1 + p.skl/100);
-    if(input.R) p.a += 0.05 * (1 + p.skl/100);
-    
-    p.spd *= (p.rain ? 0.99 : 0.97);
+    // Transmission Logic
+    let maxS = p.gearMode === 'AUTO' ? 14 : (p.gear === 1 ? 5 : p.gear === 2 ? 10 : 20);
+    let accel = p.inCar ? 0.35 : 0.15;
+
+    if(input['btn-G'] && p.spd < maxS) p.spd += accel;
+    if(input['btn-L']) p.a -= 0.06;
+    if(input['btn-R']) p.a += 0.06;
+
+    p.spd *= 0.97;
     p.x += Math.cos(p.a) * p.spd;
     p.y += Math.sin(p.a) * p.spd;
 
-    // Interaction (ATM/GYM)
-    structures.forEach(s => {
-        let dist = Math.hypot(p.x - s.x, p.y - s.y);
-        if(dist < 70 && input.A) {
-            if(s.type === 'ATM') { p.cash += 1000000; talk("Cash withdraw ho gaya."); }
-            if(s.type === 'GYM') { p.msc += 5; p.stm = 100; talk("Muscles built! Stamina recovered."); }
-            input.A = false; // Reset trigger
-        }
-    });
+    // Exit System
+    if(input['btn-E']) {
+        if(p.inCar) { p.inCar = false; carPos = {x:p.x, y:p.y, a:p.a}; p.x += 60; }
+        else if(Math.hypot(p.x-carPos.x, p.y-carPos.y) < 80) p.inCar = true, p.x=carPos.x, p.y=carPos.y, p.a=carPos.a;
+        input['btn-E'] = false;
+    }
 
-    // Fighting Skills
-    if(input.F) { p.stm -= 0.3; p.skl += 0.02; if(navigator.vibrate) navigator.vibrate(30); }
+    // Garage Zone (5200, 5000)
+    if(Math.hypot(p.x-5200, p.y-5000) < 100 && p.spd < 0.5) {
+        document.getElementById('menu-overlay').style.display = 'flex';
+        document.getElementById('start-card').style.display = 'none';
+        document.getElementById('garage-card').style.display = 'block';
+    }
 
-    // Camera
-    cam.x += (p.x - canvas.width/2 - cam.x) * 0.1;
-    cam.y += (p.y - canvas.height/2 - cam.y) * 0.1;
-
-    // UI Refresh
-    document.getElementById('cash').innerText = p.cash.toLocaleString();
-    document.getElementById('s-fill').style.width = p.stm + "%";
-    document.getElementById('m-fill').style.width = p.msc + "%";
-    document.getElementById('skill-lvl').innerText = "SKILL: LVL " + Math.floor(p.skl);
-    document.getElementById('weather-info').innerText = "WEATHER: " + (p.rain ? "RAINING" : "SUNNY");
+    document.getElementById('gear-ui').innerText = p.gearMode === 'MANUAL' ? 'G'+p.gear : 'AUTO';
 }
 
-// --- RENDERING (5D EFFECTS) ---
 function draw() {
-    ctx.fillStyle = "#050505"; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.save(); ctx.translate(-cam.x, -cam.y);
+    ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.save(); ctx.translate(canvas.width/2 - p.x, canvas.height/2 - p.y);
 
-    // Grid & Ground
-    ctx.strokeStyle = "#151515";
-    for(let i=0; i<10000; i+=300) { ctx.strokeRect(i,0,1,10000); ctx.strokeRect(0,i,10000,1); }
+    // City Area
+    ctx.fillStyle = "#111"; ctx.fillRect(4500, 4500, 1000, 1000);
+    // Village Farm
+    ctx.fillStyle = "#3d2b1f"; ctx.fillRect(5500, 5500, 1000, 1000);
+    ctx.fillStyle = "#228b22"; ctx.fillRect(5600, 5600, 400, 400); // Khet
 
-    // Structures (ATM, GYM, BRIDGE)
-    structures.forEach(s => {
-        ctx.shadowBlur = 15; ctx.shadowColor = s.color || "white";
-        ctx.fillStyle = s.color || "#333";
-        if(s.type === 'BRIDGE') ctx.fillRect(s.x, s.y, s.w, s.h);
-        else { ctx.fillRect(s.x-20, s.y-20, 40, 40); ctx.fillStyle="white"; ctx.fillText(s.type, s.x-15, s.y-25); }
-    });
+    // Garage
+    ctx.strokeStyle = "cyan"; ctx.strokeRect(5150, 4950, 100, 100);
+    ctx.fillStyle = "cyan"; ctx.fillText("GARAGE", 5160, 4940);
 
-    // BOSS PLAYER (Gold Aura)
+    // Static Car
+    if(!p.inCar) {
+        ctx.save(); ctx.translate(carPos.x, carPos.y); ctx.rotate(carPos.a);
+        ctx.fillStyle = "rgba(212,175,55,0.6)"; ctx.fillRect(-30,-18,60,36);
+        ctx.restore();
+    }
+
+    // Player/Active Car
     ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-    ctx.shadowBlur = 25; ctx.shadowColor = "gold";
-    ctx.fillStyle = "gold";
-    if(p.type==='car') { ctx.fillRect(-30, -18, 60, 36); ctx.fillStyle="black"; ctx.fillRect(10,-20,10,5); }
-    else { ctx.fillRect(-25, -7, 50, 14); ctx.fillStyle="black"; ctx.fillRect(15,-8,8,16); }
+    if(p.inCar) {
+        ctx.shadowBlur = 15; ctx.shadowColor = "gold";
+        ctx.fillStyle = "gold"; ctx.fillRect(-30,-18,60,36);
+    }
+    ctx.fillStyle = "#ffdbac"; ctx.beginPath(); ctx.arc(0,0,12,0,7); ctx.fill();
     ctx.restore();
 
     ctx.restore();
-    
-    // Rain Effect
-    if(p.rain) {
-        wCtx.clearRect(0,0,canvas.width,canvas.height);
-        wCtx.strokeStyle = "rgba(174,194,224,0.4)";
-        for(let i=0; i<50; i++) {
-            let x = Math.random()*canvas.width; let y = Math.random()*canvas.height;
-            wCtx.beginPath(); wCtx.moveTo(x,y); wCtx.lineTo(x,y+10); wCtx.stroke();
-        }
-    } else { wCtx.clearRect(0,0,canvas.width,canvas.height); }
-
-    engine(); requestAnimationFrame(draw);
+    engine();
+    requestAnimationFrame(draw);
 }
 
-// TOUCH CONTROLS
-const bind = (id, k) => {
+const bind = (id) => {
     let el = document.getElementById(id);
-    el.ontouchstart = (e) => { e.preventDefault(); input[k] = true; };
-    el.ontouchend = (e) => { e.preventDefault(); input[k] = false; };
+    el.ontouchstart = (e) => { 
+        e.preventDefault(); 
+        if(id === 'btn-S') { p.gear = p.gear >= 3 ? 1 : p.gear + 1; }
+        else input[id] = true; 
+    };
+    el.ontouchend = () => { if(id !== 'btn-E' && id !== 'btn-S') input[id] = false; };
 };
-bind('btn-L', 'L'); bind('btn-R', 'R'); bind('btn-G', 'G'); bind('btn-F', 'F'); bind('btn-A', 'A');
+['btn-L', 'btn-R', 'btn-G', 'btn-E', 'btn-S'].forEach(bind);
 
+resize();
 draw();
 </script>
 </body>
