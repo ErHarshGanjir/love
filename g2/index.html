@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed Runner</title>
+
+<style>
+body{
+    margin:0;
+    background:#111;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+}
+canvas{
+    background:linear-gradient(#222,#000);
+    border:4px solid #00ffcc;
+}
+#info{
+    position:absolute;
+    top:10px;
+    color:white;
+    font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="info">⬆ Jump | Score: <span id="score">0</span></div>
+<canvas id="game" width="800" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("score");
+
+let player = { x:50, y:300, w:40, h:40, dy:0, jump:false };
+let gravity = 0.6;
+let obstacles = [];
+let score = 0;
+let speed = 4;
+let gameOver = false;
+
+// Jump
+document.addEventListener("keydown", e=>{
+    if(e.code==="ArrowUp" && !player.jump){
+        player.dy = -12;
+        player.jump = true;
+    }
+});
+canvas.addEventListener("click", ()=>{
+    if(!player.jump){
+        player.dy = -12;
+        player.jump = true;
+    }
+});
+
+function spawnObstacle(){
+    obstacles.push({x:800,y:320,w:30,h:30});
+}
+
+function reset(){
+    obstacles=[];
+    score=0;
+    speed=4;
+    gameOver=false;
+}
+
+function update(){
+    if(gameOver) return;
+
+    ctx.clearRect(0,0,800,400);
+
+    // Player
+    player.dy += gravity;
+    player.y += player.dy;
+
+    if(player.y>=300){
+        player.y=300;
+        player.dy=0;
+        player.jump=false;
+    }
+
+    ctx.fillStyle="#00ffcc";
+    ctx.fillRect(player.x,player.y,player.w,player.h);
+
+    // Obstacles
+    for(let i=0;i<obstacles.length;i++){
+        obstacles[i].x -= speed;
+        ctx.fillStyle="#ff4444";
+        ctx.fillRect(obstacles[i].x,obstacles[i].y,obstacles[i].w,obstacles[i].h);
+
+        // Collision
+        if(
+            player.x < obstacles[i].x + obstacles[i].w &&
+            player.x + player.w > obstacles[i].x &&
+            player.y < obstacles[i].y + obstacles[i].h &&
+            player.y + player.h > obstacles[i].y
+        ){
+            gameOver = true;
+            alert("Game Over! Score: " + score);
+            reset();
+        }
+    }
+
+    obstacles = obstacles.filter(o=>o.x>-50);
+
+    // Score
+    score++;
+    scoreEl.innerText = score;
+
+    if(score%200===0) speed+=0.5;
+
+    requestAnimationFrame(update);
+}
+
+setInterval(spawnObstacle,1500);
+update();
+</script>
+
+</body>
+</html>
