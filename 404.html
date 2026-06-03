@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NONONO</title>
     <style>
-        /* Reset and enforce canvas constraints */
+        /* Classic 80s arcade cabinet aesthetic styling */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,165 +16,200 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #0d0d1a;
-            font-family: 'Arial Black', Impact, sans-serif;
+            background-color: #05030a;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Ambient glowing background */
-        .background-glow {
+        /* Classic grid overlay scanlines */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Ambient classic color vignette */
+        .arcade-frame {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255,0,128,0.15) 0%, rgba(0,255,255,0.05) 50%, rgba(0,0,0,0) 100%);
-            z-index: 1;
+            box-shadow: inset 0 0 100px rgba(139, 0, 255, 0.3);
+            z-index: 2;
+            pointer-events: none;
         }
 
-        /* Central Container */
-        .container {
+        .screen-wrapper {
             text-align: center;
             z-index: 10;
-            position: relative;
+            padding: 20px;
         }
 
-        /* Main massive pulsing text */
-        .giant-no {
-            font-size: 12vw;
-            color: #ff007f;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 20px #ff007f, 0 0 40px #ff007f, 0 0 80px #ff007f;
-            animation: pulse-glow 1.5s infinite ease-in-out alternate, glitch 0.4s infinite;
+        /* Classic block header style with a funky color cycle */
+        .title-block {
+            font-size: 8vw;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 10px;
+            animation: color-shift 2s infinite linear;
+            text-shadow: 3px 3px 0px #ff0055, -3px -3px 0px #00ffcc;
+            margin-bottom: 5px;
             user-select: none;
         }
 
-        /* Sub-text container */
-        .sub-no-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        /* Bouncing sub-elements */
-        .bounce-no {
-            font-size: 4vw;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-            user-select: none;
-        }
-
-        .bounce-no:nth-child(1) { animation: bounce 0.6s infinite alternate ease-in-out; }
-        .bounce-no:nth-child(2) { animation: bounce 0.6s infinite alternate ease-in-out 0.2s; }
-        .bounce-no:nth-child(3) { animation: bounce 0.6s infinite alternate ease-in-out 0.4s; }
-
-        /* Navigation action button */
-        .escape-button {
-            margin-top: 50px;
-            display: inline-block;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            color: #ffffff;
-            background: linear-gradient(45deg, #ff007f, #7f00ff);
-            border: none;
-            border-radius: 50px;
-            text-decoration: none;
+        /* Subtitle marquee style text */
+        .marquee-sub {
+            font-size: 1.5rem;
+            color: #00ffcc;
             text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            animation: text-flicker 1.5s infinite steps(2);
+        }
+
+        /* Funky arcade interactive machine button */
+        .retry-btn {
+            background: transparent;
+            border: 4px solid #ff0055;
+            color: #ff0055;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-family: inherit;
             font-weight: bold;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
             cursor: pointer;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            transition: all 0.1s ease;
         }
 
-        .escape-button:hover {
-            transform: scale(1.1) rotate(-3deg);
-            box-shadow: 0 0 25px #ff007f, 0 0 50px #7f00ff;
+        .retry-btn:hover {
+            background-color: #ff0055;
+            color: #05030a;
+            box-shadow: 0 0 30px #ff0055;
+            animation: button-shake 0.2s infinite;
         }
 
-        /* Background falling text elements */
-        .matrix-no {
+        .retry-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* JavaScript generated floating elements */
+        .floating-no {
             position: absolute;
-            color: rgba(255, 255, 255, 0.04);
-            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
             pointer-events: none;
             user-select: none;
-            z-index: 2;
-            animation: fall linear infinite;
+            animation: float-around 6s infinite linear;
         }
 
-        /* Animations */
-        @keyframes pulse-glow {
-            0% {
-                transform: scale(0.95);
-                text-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f;
-            }
-            100% {
-                transform: scale(1.05);
-                text-shadow: 0 0 30px #ff007f, 0 0 60px #ff007f, 0 0 100px #ff007f;
-            }
+        /* Keyframe Animations */
+        @keyframes color-shift {
+            0% { text-shadow: 4px 4px 0px #ff0055, -4px -4px 0px #00ffcc; }
+            33% { text-shadow: -4px 4px 0px #00ffcc, 4px -4px 0px #ffff00; }
+            66% { text-shadow: 4px -4px 0px #ffff00, -4px 4px 0px #ff0055; }
+            100% { text-shadow: 4px 4px 0px #ff0055, -4px -4px 0px #00ffcc; }
         }
 
-        @keyframes glitch {
-            0% { transform: translate(0) skew(0deg); }
-            20% { transform: translate(-2px, 2px) skew(-3deg); }
-            40% { transform: translate(2px, -2px) skew(3deg); }
-            60% { transform: translate(-1px, -1px) skew(1deg); }
-            80% { transform: translate(2px, 1px) skew(-1deg); }
-            100% { transform: translate(0) skew(0deg); }
+        @keyframes text-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+            55% { opacity: 0.2; }
+            60% { opacity: 0.7; }
         }
 
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-30px); }
+        @keyframes button-shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2px, -2px) rotate(1deg); }
+            50% { transform: translate(-2px, 2px) rotate(-1deg); }
+            75% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(1deg); }
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-100vh) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(360deg); }
+        @keyframes float-around {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="background-glow"></div>
+    <div class="arcade-frame"></div>
 
-    <div class="container">
-        <!-- Giant core message -->
-        <h1 class="giant-no">NONONO</h1>
+    <div class="screen-wrapper">
+        <!-- Classic Retro Styled Blocks -->
+        <div class="title-block">NONONO</div>
+        <div class="marquee-sub">● COMPROMISED SYSTEM ●</div>
         
-        <!-- Rhythmic bouncing companion elements -->
-        <div class="sub-no-container">
-            <div class="bounce-no">NO</div>
-            <div class="bounce-no">NO</div>
-            <div class="bounce-no">NO</div>
-        </div>
-
-        <!-- Safe exit navigation back home -->
-        <a href="/" class="escape-button">Go Home</a>
+        <!-- Interactive Non-Redirect Button -->
+        <button class="retry-btn" onclick="injectChaos()">Insert Coin / Retry</button>
     </div>
 
     <script>
-        // Dynamically spawn falling, drifting background matrix elements
-        const spawnCount = 40;
-        for (let i = 0; i < spawnCount; i++) {
-            const element = document.createElement('div');
-            element.classList.add('matrix-no');
-            element.innerText = 'NO';
-            
-            // Randomize position, size, and falling dynamics
-            element.style.left = Math.random() * 100 + 'vw';
-            element.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-            element.style.opacity = Math.random() * 0.06;
-            
-            const duration = Math.random() * 8 + 4;
-            const delay = Math.random() * -12;
-            element.style.animationDuration = duration + 's';
-            element.style.animationDelay = delay + 's';
-            
-            document.body.appendChild(element);
+        // Spawns background ambient text elements upon load
+        function spawnStaticElements() {
+            for(let i=0; i<25; i++) {
+                createNoElement(false);
+            }
         }
+
+        // Functional core loop to generate randomized text strings
+        function createNoElement(isChaosClicked) {
+            const el = document.createElement('div');
+            el.classList.add('floating-no');
+            el.innerText = "NONONO";
+            
+            // Layout calculations
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            
+            el.style.left = startX + 'px';
+            el.style.top = startY + 'px';
+            
+            // Inject random target trajectories
+            const targetX = (Math.random() - 0.5) * 300;
+            const targetY = (Math.random() - 0.5) * 300;
+            el.style.setProperty('--x', targetX + 'px');
+            el.style.setProperty('--y', targetY + 'px');
+            
+            // Adjust visual characteristics based on invocation trigger source
+            if (isChaosClicked) {
+                el.style.color = Math.random() > 0.5 ? '#ff0055' : '#00ffcc';
+                el.style.textShadow = '0 0 8px currentColor';
+                el.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
+                el.style.animationDuration = '2s';
+                el.style.zIndex = "5";
+            } else {
+                el.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                el.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                el.style.animationDelay = (Math.random() * -5) + 's';
+            }
+
+            document.body.appendChild(el);
+
+            // Housekeeping garbage collection
+            setTimeout(() => { el.remove(); }, isChaosClicked ? 2000 : 10000);
+        }
+
+        // Chaos generation engine attached directly to Button Click events
+        function injectChaos() {
+            // Rapidly burst 8 high-velocity, brightly colored text arrays around viewport center
+            for(let i=0; i<8; i++) {
+                createNoElement(true);
+            }
+        }
+
+        // Initialize script logic
+        spawnStaticElements();
     </script>
 </body>
 </html>
