@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NONONO</title>
     <style>
-        /* Classic 80s arcade cabinet aesthetic styling */
+        /* Smooth, retro-styled canvas configuration */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,200 +16,150 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #05030a;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: #2b1055;
+            /* Funky warm 70s gradient pattern background */
+            background: radial-gradient(circle at center, #4c1c93 0%, #1a0636 100%);
+            font-family: 'Arial Black', Impact, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Classic grid overlay scanlines */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 4px, 6px 100%;
-            pointer-events: none;
-        }
-
-        /* Ambient classic color vignette */
-        .arcade-frame {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 100px rgba(139, 0, 255, 0.3);
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .screen-wrapper {
+        .groove-container {
             text-align: center;
             z-index: 10;
-            padding: 20px;
         }
 
-        /* Classic block header style with a funky color cycle */
-        .title-block {
-            font-size: 8vw;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 10px;
-            animation: color-shift 2s infinite linear;
-            text-shadow: 3px 3px 0px #ff0055, -3px -3px 0px #00ffcc;
-            margin-bottom: 5px;
-            user-select: none;
-        }
-
-        /* Subtitle marquee style text */
-        .marquee-sub {
-            font-size: 1.5rem;
-            color: #00ffcc;
+        /* Thick, bubbly 1970s style text layers */
+        .bubbly-no {
+            font-size: 10vw;
+            color: #ffbe0b;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-            animation: text-flicker 1.5s infinite steps(2);
+            letter-spacing: -2px;
+            /* Layered retro pop art shadows */
+            text-shadow: 
+                4px 4px 0px #ff006e, 
+                8px 8px 0px #3a86ff,
+                12px 12px 0px #8338ec;
+            animation: wavy-groove 2.5s infinite ease-in-out;
+            user-select: none;
+            display: inline-block;
         }
 
-        /* Funky arcade interactive machine button */
-        .retry-btn {
-            background: transparent;
-            border: 4px solid #ff0055;
-            color: #ff0055;
-            padding: 15px 40px;
-            font-size: 1.5rem;
+        /* Secondary groovy text line */
+        .sub-tag {
+            font-size: 1.8rem;
+            color: #fb5607;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-top: -10px;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 0px #fff;
+            animation: text-swivel 3s infinite ease-in-out;
+        }
+
+        /* Funky rounded disco button */
+        .dance-btn {
+            background-color: #ff006e;
+            border: 5px solid #fff;
+            color: #fff;
+            padding: 18px 45px;
+            font-size: 1.4rem;
             font-family: inherit;
             font-weight: bold;
             text-transform: uppercase;
+            border-radius: 50px;
             cursor: pointer;
-            position: relative;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-            transition: all 0.1s ease;
+            box-shadow: 0 10px 0px #8338ec, 0 15px 25px rgba(0,0,0,0.4);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
 
-        .retry-btn:hover {
-            background-color: #ff0055;
-            color: #05030a;
-            box-shadow: 0 0 30px #ff0055;
-            animation: button-shake 0.2s infinite;
+        .dance-btn:hover {
+            background-color: #3a86ff;
+            transform: translateY(2px);
+            box-shadow: 0 8px 0px #8338ec, 0 10px 20px rgba(0,0,0,0.4);
         }
 
-        .retry-btn:active {
-            transform: scale(0.95);
+        .dance-btn:active {
+            transform: translateY(10px);
+            box-shadow: 0 0px 0px #8338ec, 0 5px 10px rgba(0,0,0,0.4);
         }
 
-        /* JavaScript generated floating elements */
-        .floating-no {
+        /* Floating disco pop stars */
+        .pop-star {
             position: absolute;
+            font-size: 2rem;
             font-weight: bold;
-            color: rgba(255, 255, 255, 0.1);
+            color: #ffbe0b;
             pointer-events: none;
             user-select: none;
-            animation: float-around 6s infinite linear;
+            animation: float-up-fade 2s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
+            text-shadow: 2px 2px 0px #ff006e;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 3px solid #1a0636;
         }
 
-        /* Keyframe Animations */
-        @keyframes color-shift {
-            0% { text-shadow: 4px 4px 0px #ff0055, -4px -4px 0px #00ffcc; }
-            33% { text-shadow: -4px 4px 0px #00ffcc, 4px -4px 0px #ffff00; }
-            66% { text-shadow: 4px -4px 0px #ffff00, -4px 4px 0px #ff0055; }
-            100% { text-shadow: 4px 4px 0px #ff0055, -4px -4px 0px #00ffcc; }
+        /* Funky Wavy Animations */
+        @keyframes wavy-groove {
+            0%, 100% { transform: translateY(0) scale(1) rotate(-3deg); }
+            50% { transform: translateY(-20px) scale(1.05) rotate(3deg); }
         }
 
-        @keyframes text-flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-            55% { opacity: 0.2; }
-            60% { opacity: 0.7; }
+        @keyframes text-swivel {
+            0%, 100% { transform: scale(0.95) rotate(1deg); color: #fb5607; }
+            50% { transform: scale(1.05) rotate(-1deg); color: #ffbe0b; }
         }
 
-        @keyframes button-shake {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(2px, -2px) rotate(1deg); }
-            50% { transform: translate(-2px, 2px) rotate(-1deg); }
-            75% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(-1px, -2px) rotate(1deg); }
-        }
-
-        @keyframes float-around {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.4; }
-            90% { opacity: 0.4; }
-            100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
+        @keyframes float-up-fade {
+            0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--mx), var(--my)) scale(1.3) rotate(45deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="arcade-frame"></div>
-
-    <div class="screen-wrapper">
-        <!-- Classic Retro Styled Blocks -->
-        <div class="title-block">NONONO</div>
-        <div class="marquee-sub">● COMPROMISED SYSTEM ●</div>
+    <div class="groove-container">
+        <!-- Thick layered retro headline -->
+        <div class="bubbly-no">NONONO</div>
         
-        <!-- Interactive Non-Redirect Button -->
-        <button class="retry-btn" onclick="injectChaos()">Insert Coin / Retry</button>
+        <!-- Smooth dancing subtitle -->
+        <div class="sub-tag">Wrong Groove</div>
+        
+        <!-- Interactive internal action layout button -->
+        <button class="dance-btn" onclick="dropTheBass(event)">Keep Dancing</button>
     </div>
 
     <script>
-        // Spawns background ambient text elements upon load
-        function spawnStaticElements() {
-            for(let i=0; i<25; i++) {
-                createNoElement(false);
+        // Spawns interactive retro-pop bubbles directly at the mouse click location
+        function dropTheBass(event) {
+            const colors = ['#ffbe0b', '#fb5607', '#ff006e', '#8338ec', '#3a86ff'];
+            
+            // Generate a small burst of floating objects nearby
+            for (let i = 0; i < 6; i++) {
+                const star = document.createElement('div');
+                star.classList.add('pop-star');
+                star.innerText = "NO!";
+                
+                // Position directly over the button area
+                star.style.left = (event.clientX - 30) + 'px';
+                star.style.top = (event.clientY - 20) + 'px';
+                
+                // Pick random colors and directions
+                star.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const moveX = (Math.random() - 0.5) * 400;
+                const moveY = (Math.random() * -300) - 50; 
+                star.style.setProperty('--mx', moveX + 'px');
+                star.style.setProperty('--my', moveY + 'px');
+                
+                document.body.appendChild(star);
+                
+                // Cleanup element
+                setTimeout(() => { star.remove(); }, 2000);
             }
         }
-
-        // Functional core loop to generate randomized text strings
-        function createNoElement(isChaosClicked) {
-            const el = document.createElement('div');
-            el.classList.add('floating-no');
-            el.innerText = "NONONO";
-            
-            // Layout calculations
-            const startX = Math.random() * window.innerWidth;
-            const startY = Math.random() * window.innerHeight;
-            
-            el.style.left = startX + 'px';
-            el.style.top = startY + 'px';
-            
-            // Inject random target trajectories
-            const targetX = (Math.random() - 0.5) * 300;
-            const targetY = (Math.random() - 0.5) * 300;
-            el.style.setProperty('--x', targetX + 'px');
-            el.style.setProperty('--y', targetY + 'px');
-            
-            // Adjust visual characteristics based on invocation trigger source
-            if (isChaosClicked) {
-                el.style.color = Math.random() > 0.5 ? '#ff0055' : '#00ffcc';
-                el.style.textShadow = '0 0 8px currentColor';
-                el.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
-                el.style.animationDuration = '2s';
-                el.style.zIndex = "5";
-            } else {
-                el.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
-                el.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                el.style.animationDelay = (Math.random() * -5) + 's';
-            }
-
-            document.body.appendChild(el);
-
-            // Housekeeping garbage collection
-            setTimeout(() => { el.remove(); }, isChaosClicked ? 2000 : 10000);
-        }
-
-        // Chaos generation engine attached directly to Button Click events
-        function injectChaos() {
-            // Rapidly burst 8 high-velocity, brightly colored text arrays around viewport center
-            for(let i=0; i<8; i++) {
-                createNoElement(true);
-            }
-        }
-
-        // Initialize script logic
-        spawnStaticElements();
     </script>
 </body>
 </html>
