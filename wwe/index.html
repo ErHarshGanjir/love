@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project WWE - Emergency Solution</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #ff5f56;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Moving Background Elements */
+        .background-glow {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 95, 86, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatGlow 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 50px); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Animations */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .badge {
+            background-color: rgba(255, 95, 86, 0.2);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+            border: 1px solid var(--accent-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .nickname {
+            font-size: 1.5rem;
+            color: #8b949e;
+            font-weight: 400;
+        }
+
+        /* Main Content Cards */
+        .main-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .pulse-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(255, 95, 86, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Moving Text Marquee */
+        .marquee-container {
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Details List */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            animation: fadeInUp 1s ease-out 0.7s both;
+        }
+
+        .detail-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 6px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .detail-item h3 {
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 95, 86, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 95, 86, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 95, 86, 0); }
+        }
+
+        @keyframes marquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        @media (max-width: 600px) {
+            .details-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-glow"></div>
+
+    <div class="container">
+        <header>
+            <span class="badge">Emergency System</span>
+            <h1>Business Operations Repository</h1>
+            <div class="nickname">Project Codename: <strong>WWE</strong></div>
+        </header>
+
+        <div class="marquee-container">
+            <div class="marquee-text">CRITICAL SYSTEM NOTICE: This repository contains a temporary emergency backup pipeline built to sustain live business operations.</div>
+        </div>
+
+        <main>
+            <section class="main-card">
+                <div class="pulse-indicator">
+                    <span class="dot"></span> Temporary System Status: Active
+                </div>
+                <p>Welcome to the official repository for project <strong>WWE</strong>. This codebase was rapidly deployed as a temporary emergency solution to keep critical business operations running smoothly during unexpected downtime.</p>
+                <br>
+                <p>It acts as a bridge to ensure business continuity, data preservation, and operational workflow stability until permanent infrastructure is restored.</p>
+            </section>
+
+            <section class="details-grid">
+                <div class="detail-item">
+                    <h3>Purpose</h3>
+                    <p>Designed to temporarily bypass primary system failures and maintain essential business daily operations.</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Scope</h3>
+                    <p>Handles immediate transactional processes, critical logging, and core operational data management.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
