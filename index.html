@@ -3,246 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Harsh ❤️</title>
+    <title>Er. Harsh Ganjir | Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
-        /* --- CSS STYLES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            /* A softer, more romantic gradient */
-            background: linear-gradient(115deg, #f9ce34, #ee2a7b, #6228d7);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 10%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            padding-top: 80px;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 4rem;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-text h2 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: hidden; 
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .profile-img {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
         }
 
-        .container {
-            position: relative;
-            z-index: 10;
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Sections General */
+        section {
+            padding: 6rem 10%;
+        }
+
+        .section-title {
             text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            position: relative;
         }
 
-        /* Glassmorphism Card */
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 40px 50px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            max-width: 400px;
-            width: 90%;
-            transition: transform 0.3s ease;
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
         }
 
-        .card:hover {
+        /* About & Skills */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-card:hover {
             transform: translateY(-5px);
         }
 
-        .gif-container img {
-            width: 150px;
-            height: auto;
-            margin-bottom: 20px;
+        .skill-card i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .skill-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
             border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
         }
 
-        h1 {
-            color: #ff4d6d;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        .project-card:hover {
+            transform: translateY(-5px);
         }
 
-        p.sub {
-            color: #555;
-            font-size: 1rem;
-            margin-bottom: 30px;
+        .project-info {
+            padding: 2rem;
         }
 
-        .buttons {
+        .project-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .project-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tags span {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0b0f19;
+            text-align: center;
+            padding: 3rem 10%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .social-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            position: relative;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        button {
-            padding: 15px 35px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.3s;
         }
 
-        /* YES Button */
-        #yesBtn {
-            background: #ff4d6d;
-            color: white;
+        .social-links a:hover {
+            color: var(--accent-color);
         }
 
-        #yesBtn:hover {
-            background: #ff2a55;
-            transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        /* NO Button */
-        #noBtn {
-            background: #e0e0e0;
-            color: #333;
-            position: relative; 
-        }
-
-        /* Hidden Success Message */
-        #success-message {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #success-message h2 {
-            color: #ff4d6d;
-            font-size: 2.5rem;
-            margin-top: 20px;
-        }
-
-        /* Confetti Canvas */
-        #confetti {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 99;
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero-container {
+                flex-direction: column-reverse;
+                text-align: center;
+                gap: 2rem;
+            }
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            .profile-img {
+                width: 250px;
+                height: 250px;
+            }
+            .nav-links {
+                display: none; /* Can be expanded into a mobile menu later */
+            }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="confetti"></canvas>
+    <nav>
+        <div class="logo">Er. Harsh Ganjir</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Expertise</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-    <div class="container">
-        <div class="card">
-            
-            <div id="question-box">
-                <div class="gif-container">
-                    <img id="mainGif" src="https://media.tenor.com/fTTVgygNCu8AAAAi/bear-blow-kiss.gif" alt="Cute Bear">
-                </div>
-                
-                <h1>Do you love Harsh? 💘</h1>
-                
-                <p class="sub">Think carefully before answering... 😌</p>
-
-                <div class="buttons">
-                    <button id="yesBtn">YES 💖</button>
-                    <button id="noBtn">NO 😅</button>
-                </div>
+    <header>
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Hi, I'm Harsh Ganjir</h1>
+                <h2>Full-Stack Developer & Automation Engineer</h2>
+                <p>I build robust web applications, design custom database schemas, and engineer advanced automation systems that streamline business operations and scale workflows seamlessly.</p>
+                <a href="#projects" class="btn">View My Work</a>
             </div>
-
-            <div id="success-message">
-                <div class="gif-container">
-                    <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Happy Bear">
-                </div>
-                <h2>Yay! I knew it! 💖🥰</h2>
-                <p class="sub">Best decision ever!</p>
+            <div class="hero-image">
+                <img src="https://i.ibb.co/27s4g0qD/Whats-App-Image-2026-06-03-at-12-18-54-PM.jpg" alt="Harsh Ganjir" class="profile-img">
             </div>
-
         </div>
-    </div>
+    </header>
 
-    <script>
-        /* --- JAVASCRIPT --- */
-        const yesBtn = document.getElementById("yesBtn");
-        const noBtn = document.getElementById("noBtn");
-        const questionBox = document.getElementById("question-box");
-        const successMessage = document.getElementById("success-message");
+    <section id="skills">
+        <h2 class="section-title">What I Do</h2>
+        <div class="skills-container">
+            <div class="skill-card">
+                <i class="fas fa-code"></i>
+                <h3>Web Development</h3>
+                <p>Crafting responsive front-ends and scalable back-ends using HTML, CSS, JavaScript, and modern integration frameworks.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-robot"></i>
+                <h3>Workflow Automation</h3>
+                <p>Building tailored Google Apps Script ecosystems, custom email ticket handling pipelines, and automated notification setups.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-database"></i>
+                <h3>Data Architecture</h3>
+                <p>Designing structures in MongoDB alongside building complex, macro-driven VBA systems for massive data sets.</p>
+            </div>
+        </div>
+    </section>
 
-        // Logic to make the NO button run away
-        function moveButton() {
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-            const btnWidth = noBtn.offsetWidth;
-            const btnHeight = noBtn.offsetHeight;
+    <section id="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Mail Ticket Management System</h3>
+                    <p>An enterprise-focused ticketing system integrated deeply with Gmail to track, categorize, and resolve automated manufacturer inquiries.</p>
+                    <div class="tags">
+                        <span>Google Apps Script</span>
+                        <span>JavaScript</span>
+                        <span>HTML API</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>ChequeBook Pro Portal</h3>
+                    <p>A secure internal banking and ledger management web portal designed to monitor, track, and clear enterprise payment sequences.</p>
+                    <div class="tags">
+                        <span>Full-Stack Web</span>
+                        <span>Database Design</span>
+                        <span>UI/UX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Attendance & Payroll Engine</h3>
+                    <p>A robust data-driven application built to manage comprehensive tracking, daily shift logs, and custom salary algorithms for large-scale operations.</p>
+                    <div class="tags">
+                        <span>VBA / Excel Advanced</span>
+                        <span>Automation</span>
+                        <span>Data Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            // Calculate random position
-            const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20;
-            const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
+    <footer id="contact">
+        <div class="social-links">
+            <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="#" target="_blank"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p>&copy; 2026 Er. Harsh Ganjir. All rights reserved.</p>
+    </footer>
 
-            // Apply new position
-            noBtn.style.position = 'fixed'; 
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-        }
-
-        noBtn.addEventListener("mouseenter", moveButton);
-        noBtn.addEventListener("touchstart", moveButton);
-
-        yesBtn.addEventListener("click", () => {
-            questionBox.style.display = "none"; 
-            successMessage.style.display = "flex"; 
-            startConfetti(); 
-        });
-
-        /* --- CONFETTI ENGINE --- */
-        const canvas = document.getElementById("confetti");
-        const ctx = canvas.getContext("2d");
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function startConfetti() {
-            for (let i = 0; i < 150; i++) {
-                particles.push({
-                    x: window.innerWidth / 2,
-                    y: window.innerHeight / 2,
-                    w: Math.random() * 10 + 5,
-                    h: Math.random() * 10 + 5,
-                    dx: Math.random() * 10 - 5,
-                    dy: Math.random() * 10 - 5,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    gravity: 0.1
-                });
-            }
-            animateConfetti();
-        }
-
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.x += p.dx;
-                p.y += p.dy;
-                p.dy += p.gravity;
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, p.w, p.h);
-                if (p.y > canvas.height) particles.splice(index, 1);
-            });
-            if (particles.length > 0) requestAnimationFrame(animateConfetti);
-        }
-    </script>
 </body>
 </html>
