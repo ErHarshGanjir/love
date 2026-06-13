@@ -1,18 +1,23 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>ChequeBook Pro</title>
 
+<!-- App Icon -->
 <link rel="icon" type="image/png" href="ChequeBook favicon.png">
+
+<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f172a">
 
 <style>
+
+/* =========================
+   GLOBAL
+========================= */
 
 *{
     margin:0;
@@ -24,229 +29,190 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:Segoe UI,Arial,sans-serif;
-    background:#fff;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:#ffffff;
 }
 
-/* ===========================
+/* =========================
    IFRAME
-=========================== */
+========================= */
 
 #content-frame{
+    position:absolute;
+    top:0;
+    left:0;
     width:100%;
     height:100%;
     border:none;
-    display:none;
+    z-index:1;
 }
 
-/* ===========================
-   LOADER SCREEN
-=========================== */
+/* =========================
+   PREMIUM DYNAMIC ISLAND
+========================= */
 
-#loaderScreen{
+#dynamicIsland{
+
     position:fixed;
-    inset:0;
-    z-index:999999999;
+
+    top:15px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:430px;
+    max-width:92vw;
+
+    height:76px;
 
     background:
-    radial-gradient(circle at top,#1e3a8a,#0f172a 60%);
+    rgba(8,12,20,.88);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:999px;
+
+    z-index:99999999;
 
     display:flex;
-    justify-content:center;
     align-items:center;
+
+    gap:15px;
+
+    padding:0 18px;
+
+    box-shadow:
+    0 15px 45px rgba(0,0,0,.35),
+    0 0 25px rgba(59,130,246,.15);
+
+    animation:islandOpen .8s ease;
+}
+
+.island-icon{
+    width:42px;
+    text-align:center;
+    font-size:24px;
+}
+
+.island-text{
+    flex:1;
     overflow:hidden;
 }
 
-/* Floating Glow */
-
-.glow1,
-.glow2{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(100px);
+#islandTitle{
+    color:#ffffff;
+    font-size:15px;
+    font-weight:700;
+    white-space:nowrap;
 }
 
-.glow1{
-    width:300px;
-    height:300px;
-    background:#06b6d4;
-    top:-80px;
-    left:-80px;
-    opacity:.35;
+#islandSub{
+    color:#cbd5e1;
+    font-size:12px;
+    margin-top:3px;
+    white-space:nowrap;
 }
 
-.glow2{
-    width:350px;
-    height:350px;
-    background:#3b82f6;
-    bottom:-120px;
-    right:-120px;
-    opacity:.25;
-}
+.ring{
 
-/* Card */
-
-.loader-card{
-    width:90%;
-    max-width:430px;
-
-    padding:35px;
-
-    text-align:center;
-
-    backdrop-filter:blur(20px);
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    border-radius:25px;
-
-    color:white;
-
-    box-shadow:
-    0 20px 60px rgba(0,0,0,.4);
-}
-
-/* Logo */
-
-.logo-wrap{
-    position:relative;
-    width:130px;
-    height:130px;
-    margin:auto;
-}
-
-.pulse{
-    position:absolute;
-    inset:0;
-    border-radius:50%;
-    background:rgba(56,189,248,.3);
-    animation:pulse 2s infinite;
-}
-
-.spinner{
-    width:130px;
-    height:130px;
+    width:28px;
+    height:28px;
 
     border-radius:50%;
 
-    border:6px solid rgba(255,255,255,.15);
-    border-top:6px solid #38bdf8;
+    border:
+    3px solid rgba(255,255,255,.15);
+
+    border-top:
+    3px solid #38bdf8;
 
     animation:spin 1s linear infinite;
 }
 
-.db-icon{
-    position:absolute;
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    font-size:50px;
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
 }
 
-/* Text */
+@keyframes islandOpen{
+    from{
+        opacity:0;
+        transform:
+        translateX(-50%)
+        translateY(-30px);
+    }
 
-.app-name{
-    margin-top:20px;
-    font-size:34px;
-    font-weight:700;
+    to{
+        opacity:1;
+        transform:
+        translateX(-50%)
+        translateY(0);
+    }
 }
 
-.status{
-    margin-top:25px;
-    font-size:24px;
-    font-weight:600;
-}
-
-.sub-status{
-    margin-top:10px;
-    color:#cbd5e1;
-    line-height:1.5;
-}
-
-/* Progress */
-
-.progress{
-    margin-top:25px;
-
-    height:14px;
-
-    background:rgba(255,255,255,.12);
-
-    border-radius:30px;
-
-    overflow:hidden;
-}
-
-.progress-fill{
-    width:0%;
-    height:100%;
-
-    background:
-    linear-gradient(
-    90deg,
-    #06b6d4,
-    #3b82f6,
-    #22c55e);
-
-    border-radius:30px;
-}
-
-.percent{
-    margin-top:10px;
-    font-size:15px;
-}
-
-/* Install Button */
+/* =========================
+   INSTALL BUTTON
+========================= */
 
 #installBtn{
-    position:fixed;
-    top:15px;
-    right:15px;
 
-    padding:10px 16px;
+    position:fixed;
+
+    right:15px;
+    bottom:20px;
+
+    z-index:999999999;
 
     background:#0f172a;
 
     color:white;
 
     border:none;
-    border-radius:8px;
+
+    border-radius:12px;
+
+    padding:12px 18px;
 
     cursor:pointer;
 
-    z-index:9999999999;
+    font-size:14px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.25);
 
     display:none;
 }
 
-/* Success */
-
-.success{
-    color:#22c55e;
-    text-shadow:0 0 25px #22c55e;
+#installBtn:hover{
+    transform:translateY(-2px);
 }
 
-/* Animations */
+/* =========================
+   MOBILE
+========================= */
 
-@keyframes spin{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-}
+@media(max-width:600px){
 
-@keyframes pulse{
-    from{
-        transform:scale(.8);
-        opacity:.9;
+    #dynamicIsland{
+        height:72px;
     }
 
-    to{
-        transform:scale(1.6);
-        opacity:0;
+    #islandTitle{
+        font-size:14px;
     }
+
+    #islandSub{
+        font-size:11px;
+    }
+
 }
 
 </style>
@@ -254,54 +220,31 @@ html,body{
 
 <body>
 
-<!-- INSTALL BUTTON -->
-<button id="installBtn">
-⬇ Install App
-</button>
+<!-- PREMIUM DYNAMIC ISLAND -->
 
-<!-- LOADER -->
-<div id="loaderScreen">
+<div id="dynamicIsland">
 
-    <div class="glow1"></div>
-    <div class="glow2"></div>
+    <div class="island-icon" id="islandIcon">
+        🔄
+    </div>
 
-    <div class="loader-card">
+    <div class="island-text">
 
-        <div class="logo-wrap">
-
-            <div class="pulse"></div>
-
-            <div class="spinner"></div>
-
-            <div class="db-icon">🗄️</div>
-
+        <div id="islandTitle">
+            Connecting Database
         </div>
 
-        <div class="app-name">
-            ChequeBook Pro
-        </div>
-
-        <div class="status" id="statusText">
-            Connecting with Database
-        </div>
-
-        <div class="sub-status" id="subText">
-            Establishing secure encrypted connection...
-        </div>
-
-        <div class="progress">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="percent" id="percentText">
-            0%
+        <div id="islandSub">
+            Initializing secure connection...
         </div>
 
     </div>
 
+    <div class="ring"></div>
+
 </div>
 
-<!-- APP CONTENT -->
+<!-- IFRAME -->
 
 <iframe
 id="content-frame"
@@ -309,11 +252,17 @@ allow="clipboard-read; clipboard-write"
 src="https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec">
 </iframe>
 
+<!-- INSTALL BUTTON -->
+
+<button id="installBtn">
+⬇ Install App
+</button>
+
 <script>
 
-/* ===========================
+/* =========================
    INSTALL APP
-=========================== */
+========================= */
 
 let deferredPrompt;
 
@@ -321,115 +270,140 @@ const installBtn =
 document.getElementById("installBtn");
 
 window.addEventListener(
-'beforeinstallprompt',
+"beforeinstallprompt",
 (e)=>{
 
-e.preventDefault();
+    e.preventDefault();
 
-deferredPrompt=e;
+    deferredPrompt = e;
 
-installBtn.style.display='block';
+    installBtn.style.display = "block";
 
-installBtn.onclick=()=>{
+    installBtn.addEventListener("click",()=>{
 
-installBtn.style.display='none';
+        installBtn.style.display = "none";
 
-deferredPrompt.prompt();
+        deferredPrompt.prompt();
 
-deferredPrompt.userChoice.then(()=>{
+        deferredPrompt.userChoice.then(()=>{
 
-deferredPrompt=null;
+            deferredPrompt = null;
+
+        });
+
+    });
 
 });
 
-};
+/* =========================
+   DYNAMIC ISLAND FLOW
+========================= */
 
-});
+const island =
+document.getElementById("dynamicIsland");
 
-/* ===========================
-   PREMIUM LOADER
-=========================== */
+const title =
+document.getElementById("islandTitle");
 
-const progressFill =
-document.getElementById("progressFill");
+const sub =
+document.getElementById("islandSub");
 
-const percentText =
-document.getElementById("percentText");
+const icon =
+document.getElementById("islandIcon");
 
-const statusText =
-document.getElementById("statusText");
+const ring =
+document.querySelector(".ring");
 
-const subText =
-document.getElementById("subText");
-
-const iframe =
-document.getElementById("content-frame");
-
-const loader =
-document.getElementById("loaderScreen");
-
-let percent = 0;
-
-const interval = setInterval(()=>{
-
-percent++;
-
-progressFill.style.width =
-percent + "%";
-
-percentText.innerHTML =
-percent + "%";
-
-if(percent===25){
-subText.innerHTML =
-"Verifying security credentials...";
-}
-
-if(percent===50){
-subText.innerHTML =
-"Synchronizing records...";
-}
-
-if(percent===75){
-subText.innerHTML =
-"Preparing application modules...";
-}
-
-if(percent>=100){
-
-clearInterval(interval);
-
-statusText.innerHTML =
-"✅ Connection Established Successfully";
-
-statusText.classList.add("success");
-
-subText.innerHTML =
-"Database connected successfully.";
+/* 3 sec */
 
 setTimeout(()=>{
 
-loader.style.transition =
-"all .8s ease";
+    title.innerHTML =
+    "🔒 Verifying Security";
 
-loader.style.opacity="0";
+    sub.innerHTML =
+    "Checking encrypted credentials...";
+
+},3000);
+
+/* 7 sec */
 
 setTimeout(()=>{
 
-loader.remove();
+    title.innerHTML =
+    "☁️ Connecting Database";
 
-iframe.style.display="block";
+    sub.innerHTML =
+    "Fetching cloud records...";
 
-},800);
+},7000);
 
-},2000);
+/* 11 sec */
+
+setTimeout(()=>{
+
+    title.innerHTML =
+    "🔄 Syncing Records";
+
+    sub.innerHTML =
+    "Synchronizing application data...";
+
+},11000);
+
+/* 14 sec */
+
+setTimeout(()=>{
+
+    icon.innerHTML = "✅";
+
+    title.innerHTML =
+    "Connection Successful";
+
+    sub.innerHTML =
+    "Database connected successfully";
+
+    ring.style.display = "none";
+
+},14000);
+
+/* 16 sec */
+
+setTimeout(()=>{
+
+    island.style.transition =
+    "all .8s ease";
+
+    island.style.opacity =
+    "0";
+
+    island.style.transform =
+    "translateX(-50%) translateY(-30px)";
+
+    setTimeout(()=>{
+
+        island.remove();
+
+    },800);
+
+},16000);
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener("load",()=>{
+
+        navigator.serviceWorker
+        .register("service-worker.js")
+        .catch(err=>console.log(err));
+
+    });
 
 }
-
-},140);
 
 </script>
 
 </body>
 </html>
-```
