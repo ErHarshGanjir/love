@@ -1,93 +1,435 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ChequeBook Pro</title>
-    
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ChequeBook Pro</title>
 
-    <!-- App icon -->
-    <link rel="icon" type="image/png" href="ChequeBook favicon.png">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
+<link rel="icon" type="image/png" href="ChequeBook favicon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            box-sizing: border-box;
-            background: #fff;
-        }
-        
-        #content-frame {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow-y: scroll; 
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Segoe UI,Arial,sans-serif;
+    background:#fff;
+}
+
+/* ===========================
+   IFRAME
+=========================== */
+
+#content-frame{
+    width:100%;
+    height:100%;
+    border:none;
+    display:none;
+}
+
+/* ===========================
+   LOADER SCREEN
+=========================== */
+
+#loaderScreen{
+    position:fixed;
+    inset:0;
+    z-index:999999999;
+
+    background:
+    radial-gradient(circle at top,#1e3a8a,#0f172a 60%);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+/* Floating Glow */
+
+.glow1,
+.glow2{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(100px);
+}
+
+.glow1{
+    width:300px;
+    height:300px;
+    background:#06b6d4;
+    top:-80px;
+    left:-80px;
+    opacity:.35;
+}
+
+.glow2{
+    width:350px;
+    height:350px;
+    background:#3b82f6;
+    bottom:-120px;
+    right:-120px;
+    opacity:.25;
+}
+
+/* Card */
+
+.loader-card{
+    width:90%;
+    max-width:430px;
+
+    padding:35px;
+
+    text-align:center;
+
+    backdrop-filter:blur(20px);
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    border-radius:25px;
+
+    color:white;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.4);
+}
+
+/* Logo */
+
+.logo-wrap{
+    position:relative;
+    width:130px;
+    height:130px;
+    margin:auto;
+}
+
+.pulse{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:rgba(56,189,248,.3);
+    animation:pulse 2s infinite;
+}
+
+.spinner{
+    width:130px;
+    height:130px;
+
+    border-radius:50%;
+
+    border:6px solid rgba(255,255,255,.15);
+    border-top:6px solid #38bdf8;
+
+    animation:spin 1s linear infinite;
+}
+
+.db-icon{
+    position:absolute;
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    font-size:50px;
+}
+
+/* Text */
+
+.app-name{
+    margin-top:20px;
+    font-size:34px;
+    font-weight:700;
+}
+
+.status{
+    margin-top:25px;
+    font-size:24px;
+    font-weight:600;
+}
+
+.sub-status{
+    margin-top:10px;
+    color:#cbd5e1;
+    line-height:1.5;
+}
+
+/* Progress */
+
+.progress{
+    margin-top:25px;
+
+    height:14px;
+
+    background:rgba(255,255,255,.12);
+
+    border-radius:30px;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+
+    background:
+    linear-gradient(
+    90deg,
+    #06b6d4,
+    #3b82f6,
+    #22c55e);
+
+    border-radius:30px;
+}
+
+.percent{
+    margin-top:10px;
+    font-size:15px;
+}
+
+/* Install Button */
+
+#installBtn{
+    position:fixed;
+    top:15px;
+    right:15px;
+
+    padding:10px 16px;
+
+    background:#0f172a;
+
+    color:white;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    z-index:9999999999;
+
+    display:none;
+}
+
+/* Success */
+
+.success{
+    color:#22c55e;
+    text-shadow:0 0 25px #22c55e;
+}
+
+/* Animations */
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+@keyframes pulse{
+    from{
+        transform:scale(.8);
+        opacity:.9;
+    }
+
+    to{
+        transform:scale(1.6);
+        opacity:0;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-    <!-- i fream url               https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec     -->
-    <iframe
-        id="content-frame"
-        allow="clipboard-read; clipboard-write"
-        src="https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec">
-    </iframe>
-
-    <button id="installBtn" style="
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  padding: 10px 16px;
-  background: #0f172a;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 999999;
-  display: none;">
-  ⬇ Install App
+<!-- INSTALL BUTTON -->
+<button id="installBtn">
+⬇ Install App
 </button>
 
+<!-- LOADER -->
+<div id="loaderScreen">
 
-    <!-- Service worker registration -->
+    <div class="glow1"></div>
+    <div class="glow2"></div>
+
+    <div class="loader-card">
+
+        <div class="logo-wrap">
+
+            <div class="pulse"></div>
+
+            <div class="spinner"></div>
+
+            <div class="db-icon">🗄️</div>
+
+        </div>
+
+        <div class="app-name">
+            ChequeBook Pro
+        </div>
+
+        <div class="status" id="statusText">
+            Connecting with Database
+        </div>
+
+        <div class="sub-status" id="subText">
+            Establishing secure encrypted connection...
+        </div>
+
+        <div class="progress">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="percent" id="percentText">
+            0%
+        </div>
+
+    </div>
+
+</div>
+
+<!-- APP CONTENT -->
+
+<iframe
+id="content-frame"
+allow="clipboard-read; clipboard-write"
+src="https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec">
+</iframe>
+
 <script>
+
+/* ===========================
+   INSTALL APP
+=========================== */
+
 let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
+const installBtn =
+document.getElementById("installBtn");
 
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
+window.addEventListener(
+'beforeinstallprompt',
+(e)=>{
 
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  });
+e.preventDefault();
+
+deferredPrompt=e;
+
+installBtn.style.display='block';
+
+installBtn.onclick=()=>{
+
+installBtn.style.display='none';
+
+deferredPrompt.prompt();
+
+deferredPrompt.userChoice.then(()=>{
+
+deferredPrompt=null;
+
 });
-</script>
 
+};
+
+});
+
+/* ===========================
+   PREMIUM LOADER
+=========================== */
+
+const progressFill =
+document.getElementById("progressFill");
+
+const percentText =
+document.getElementById("percentText");
+
+const statusText =
+document.getElementById("statusText");
+
+const subText =
+document.getElementById("subText");
+
+const iframe =
+document.getElementById("content-frame");
+
+const loader =
+document.getElementById("loaderScreen");
+
+let percent = 0;
+
+const interval = setInterval(()=>{
+
+percent++;
+
+progressFill.style.width =
+percent + "%";
+
+percentText.innerHTML =
+percent + "%";
+
+if(percent===25){
+subText.innerHTML =
+"Verifying security credentials...";
+}
+
+if(percent===50){
+subText.innerHTML =
+"Synchronizing records...";
+}
+
+if(percent===75){
+subText.innerHTML =
+"Preparing application modules...";
+}
+
+if(percent>=100){
+
+clearInterval(interval);
+
+statusText.innerHTML =
+"✅ Connection Established Successfully";
+
+statusText.classList.add("success");
+
+subText.innerHTML =
+"Database connected successfully.";
+
+setTimeout(()=>{
+
+loader.style.transition =
+"all .8s ease";
+
+loader.style.opacity="0";
+
+setTimeout(()=>{
+
+loader.remove();
+
+iframe.style.display="block";
+
+},800);
+
+},2000);
+
+}
+
+},140);
+
+</script>
 
 </body>
 </html>
+```
