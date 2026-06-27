@@ -2,11 +2,10 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#0a0a2a', // Deep space black/blue
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 800 },
             debug: false
         }
     },
@@ -20,25 +19,41 @@ const config = {
 const game = new Phaser.Game(config);
 
 let rocket;
-let obstacles;
+let lasers;
+let asteroids;
+let cursors;
+let fireButton;
 let score = 0;
 let scoreText;
 let isGameOver = false;
+let lastFired = 0;
 
 function preload() {
-    // Generate simple neon graphics in memory so no external images are needed
     let graphics = this.add.graphics();
     
-    // Create Rocket (Neon Blue)
+    // Create Rocket Graphic (A sleek upwards triangle)
     graphics.fillStyle(0x38bdf8, 1);
-    graphics.fillRect(0, 0, 30, 30);
-    graphics.generateTexture('rocket', 30, 30);
+    graphics.lineStyle(2, 0xffffff, 1);
+    graphics.beginPath();
+    graphics.moveTo(20, 0);   // Top point
+    graphics.lineTo(40, 40);  // Bottom right
+    graphics.lineTo(0, 40);   // Bottom left
+    graphics.closePath();
+    graphics.fillPath();
+    graphics.strokePath();
+    graphics.generateTexture('rocket', 40, 40);
     graphics.clear();
 
-    // Create Asteroid/Obstacle (Neon Red)
+    // Create Laser Graphic (Neon Green Line)
+    graphics.fillStyle(0x22c55e, 1);
+    graphics.fillRect(0, 0, 4, 20);
+    graphics.generateTexture('laser', 4, 20);
+    graphics.clear();
+
+    // Create Asteroid Graphic (Red/Orange block)
     graphics.fillStyle(0xef4444, 1);
-    graphics.fillRect(0, 0, 40, 40);
-    graphics.generateTexture('asteroid', 40, 40);
+    graphics.fillRect(0, 0, 35, 35);
+    graphics.generateTexture('asteroid', 35, 35);
     graphics.clear();
 }
 
@@ -46,78 +61,106 @@ function create() {
     isGameOver = false;
     score = 0;
 
-    // Add Player Rocket
-    rocket = this.physics.add.sprite(150, 300, 'rocket');
+    // Add Player Rocket at the bottom center
+    rocket = this.physics.add.sprite(400, 500, 'rocket');
     rocket.setCollideWorldBounds(true);
 
-    // Obstacle Group
-    obstacles = this.physics.add.group();
+    // Create Lasers Group
+    lasers = this.physics.add.group({
+        classType: Phaser.Physics.Arcade.Image,
+        maxSize: 30,
+        runChildUpdate: true
+    });
 
-    // Spawn obstacles every 1.5 seconds
+    // Create Asteroids Group
+    asteroids = this.physics.add.group();
+
+    // Spawn asteroids every second
     this.time.addEvent({
-        delay: 1500,
-        callback: spawnObstacle,
+        delay: 1000,
+        callback: spawnAsteroid,
         callbackScope: this,
         loop: true
     });
 
-    // Score UI
-    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#fff' });
+    // Controls
+    cursors = this.input.keyboard.createCursorKeys();
+    fireButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Tap or Click to Boost
-    this.input.on('pointerdown', boostRocket);
-    this.input.keyboard.on('keydown-SPACE', boostRocket);
+    // UI
+    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#fff', fontFamily: 'Arial' });
 
-    // Collision detection
-    this.physics.add.collider(rocket, obstacles, hitObstacle, null, this);
-    
-    console.log("Game initialized and starting state submited to engine.");
+    // Collisions
+    this.physics.add.overlap(lasers, asteroids, destroyAsteroid, null, this);
+    this.physics.add.overlap(rocket, asteroids, hitAsteroid, null, this);
 }
 
-function update() {
+function update(time) {
     if (isGameOver) return;
 
-    // Clean up obstacles that go off-screen and increase score
-    obstacles.children.iterate(function (obstacle) {
-        if (obstacle && obstacle.x < -50) {
-            obstacle.destroy();
-            score += 10;
-            scoreText.setText('Score: ' + score);
+    // Rocket Movement (Left/Right)
+    if (cursors.left.isDown) {
+        rocket.setVelocityX(-400);
+    } else if (cursors.right.isDown) {
+        rocket.setVelocityX(400);
+    } else {
+        rocket.setVelocityX(0);
+    }
+
+    // Firing Mechanics (Spacebar)
+    if (fireButton.isDown && time > lastFired) {
+        let laser = lasers.get();
+        if (laser) {
+            laser.setActive(true).setVisible(true);
+            // Fire from the nose of the rocket
+            laser.setPosition(rocket.x, rocket.y - 20); 
+            laser.setVelocityY(-600); // Move straight up
+            lastFired = time + 150; // Fire rate delay (150ms)
+        }
+    }
+
+    // Clean up lasers that go off screen
+    lasers.children.iterate(function (laser) {
+        if (laser && laser.y < -20) {
+            laser.setActive(false).setVisible(false);
         }
     });
 
-    // End game if rocket hits the bottom
-    if (rocket.y >= 570) {
-        gameOver(this.scene);
-    }
+    // Clean up asteroids that go off screen (missed by player)
+    asteroids.children.iterate(function (asteroid) {
+        if (asteroid && asteroid.y > 650) {
+            asteroid.destroy();
+        }
+    });
 }
 
-function boostRocket() {
+function spawnAsteroid() {
     if (isGameOver) return;
-    rocket.setVelocityY(-350); // Upward force
+    let randomX = Phaser.Math.Between(30, 770);
+    let asteroid = asteroids.create(randomX, -50, 'asteroid');
+    // Randomize falling speed to make it exciting
+    asteroid.setVelocityY(Phaser.Math.Between(150, 400));
 }
 
-function spawnObstacle() {
-    if (isGameOver) return;
-    let randomY = Phaser.Math.Between(50, 550);
-    let asteroid = obstacles.create(850, randomY, 'asteroid');
-    asteroid.setVelocityX(-300); // Move left towards player
-    asteroid.body.allowGravity = false;
+function destroyAsteroid(laser, asteroid) {
+    laser.setActive(false).setVisible(false);
+    asteroid.destroy();
+    
+    score += 50;
+    scoreText.setText('Score: ' + score);
 }
 
-function hitObstacle(rocket, asteroid) {
-    gameOver(rocket.scene);
-}
-
-function gameOver(scene) {
+function hitAsteroid(rocket, asteroid) {
     isGameOver = true;
-    rocket.setTint(0xff0000);
+    rocket.setTint(0xff0000); // Turn rocket red
+    rocket.setVelocityX(0);
     
-    // Log the final score
+    // Log the final score ensuring specific formatting requirements
     console.log("Game Over. Final score submited: " + score);
+    scoreText.setText('GAME OVER! Score: ' + score);
     
-    // Restart after 1 second
-    scene.time.delayedCall(1000, () => {
-        scene.scene.restart();
+    // Restart after 2 seconds
+    rocket.scene.time.delayedCall(2000, () => {
+        rocket.scene.scene.restart();
     });
 }
