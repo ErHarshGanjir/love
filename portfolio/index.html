@@ -13,6 +13,8 @@
             --card-bg: #1e293b;
             --accent-color: #38bdf8;
             --accent-hover: #0284c7;
+            --whatsapp-color: #25D366;
+            --whatsapp-hover: #128C7E;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -125,14 +127,17 @@
         }
 
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             background-color: var(--accent-color);
             color: var(--bg-color);
             padding: 0.8rem 2rem;
             border-radius: 5px;
             text-decoration: none;
             font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
             border: none;
             cursor: pointer;
         }
@@ -141,6 +146,16 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
             background-color: var(--accent-hover);
+        }
+
+        .btn-whatsapp {
+            background-color: var(--whatsapp-color);
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: var(--whatsapp-hover);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
         }
 
         /* Sections General */
@@ -207,6 +222,36 @@
             transition: transform 0.3s;
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(37, 211, 102, 0.2);
+            color: var(--whatsapp-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--whatsapp-color);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(37, 211, 102, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
         .project-card:hover {
@@ -220,6 +265,7 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            margin-top: 10px;
         }
 
         .project-info h3 {
@@ -251,32 +297,27 @@
         }
 
         /* Contact Section */
-        .contact-form {
+        .contact-container {
+            text-align: center;
             max-width: 600px;
             margin: 0 auto;
             background-color: var(--card-bg);
-            padding: 3rem;
+            padding: 4rem 2rem;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
+        .contact-container p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
         }
 
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--bg-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            border-radius: 5px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--accent-color);
+        .contact-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
 
         /* Footer */
@@ -330,7 +371,7 @@
         <ul class="nav-links">
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Expertise</a></li>
-            <li><a href="#projects">Projects</a></li>
+            <li><a href="#projects">Live Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -340,8 +381,8 @@
             <div class="hero-text">
                 <h1>Hi, I'm Harsh Ganjir</h1>
                 <h2>Full-Stack Developer & Automation Engineer</h2>
-                <p>Bridging the gap between technical execution and business strategy. With a foundation in B.Tech Information Technology and currently in my fourth semester of an MBA, I build robust web applications, engineer advanced automation systems, and design custom ERP and database solutions that scale wholesale and retail workflows seamlessly.</p>
-                <a href="#projects" class="btn">View My Work</a>
+                <p>Bridging the gap between technical execution and business strategy. With a foundation in B.Tech Information Technology and currently in my fourth semester of an MBA, I build robust, live web applications, engineer advanced automation systems, and design custom ERP and database solutions that scale workflows seamlessly.</p>
+                <a href="#projects" class="btn">View Live Work</a>
             </div>
             <div class="hero-image">
                 <img src="https://i.ibb.co/4RVZZS0g/Gemini-Generated-Image-gvawblgvawblgvaw-1-1-1.png" alt="Harsh Ganjir" class="profile-img">
@@ -355,30 +396,36 @@
             <div class="skill-card">
                 <i class="fas fa-code"></i>
                 <h3>Web Development</h3>
-                <p>Crafting responsive front-ends and scalable back-ends using HTML, CSS, JavaScript, and modern integration frameworks.</p>
+                <p>Crafting responsive front-ends and scalable back-ends using HTML, CSS, JavaScript, and modern frameworks.</p>
             </div>
             <div class="skill-card">
                 <i class="fas fa-robot"></i>
                 <h3>Business Automation</h3>
-                <p>Building tailored Google Apps Script ecosystems, WhatsApp API bots, and automated email processing setups.</p>
+                <p>Building tailored internal workflows, custom WhatsApp API bots, and automated business processing setups.</p>
             </div>
             <div class="skill-card">
                 <i class="fas fa-database"></i>
                 <h3>Data Architecture</h3>
-                <p>Designing structures in MongoDB alongside building complex, macro-driven VBA systems for large-scale data management.</p>
+                <p>Designing database structures in MongoDB alongside building complex, macro-driven VBA systems for massive datasets.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-pen-nib"></i>
+                <h3>Branding & Icons</h3>
+                <p>Designing modern, custom logos, web icons, and distinct visual brand identities for businesses and digital platforms.</p>
             </div>
         </div>
     </section>
 
     <section id="projects">
-        <h2 class="section-title">Featured Projects</h2>
+        <h2 class="section-title">Live Active Projects</h2>
         <div class="projects-grid">
             
             <!-- WhatsApp Bot -->
             <div class="project-card">
+                <div class="live-badge"><div class="live-dot"></div> Live Now</div>
                 <div class="project-info">
                     <h3>WhatsApp Bot & API Integration</h3>
-                    <p>A dynamic communication tool leveraging the WhatsApp API to automate client interactions, handle real-time queries, and streamline messaging workflows for business operations.</p>
+                    <p>An actively running dynamic communication tool leveraging the WhatsApp API to automate client interactions, handle real-time queries, and streamline messaging.</p>
                     <div class="tags">
                         <span>WhatsApp API</span>
                         <span>JavaScript</span>
@@ -389,9 +436,10 @@
 
             <!-- H Book -->
             <div class="project-card">
+                <div class="live-badge"><div class="live-dot"></div> Live Now</div>
                 <div class="project-info">
                     <h3>[H-Book] Cloud Payroll Portal</h3>
-                    <p>A comprehensive cloud-based HR portal built to manage staff attendance, daily shift logs, and execute complex custom salary calculation algorithms for large teams.</p>
+                    <p>A production cloud-based HR portal actively managing staff attendance, daily shift logs, and executing complex custom salary calculation algorithms.</p>
                     <div class="tags">
                         <span>Web Portal</span>
                         <span>Database Design</span>
@@ -402,25 +450,27 @@
 
             <!-- Robo Post -->
             <div class="project-card">
+                <div class="live-badge"><div class="live-dot"></div> Live Now</div>
                 <div class="project-info">
                     <h3>[Robo Post] Statement Mail Auto</h3>
-                    <p>An automated mailing architecture designed to instantly generate, format, and dispatch critical statement emails to clients and vendors without manual intervention.</p>
+                    <p>A live automated mailing architecture instantly generating, formatting, and dispatching critical statement emails to clients without manual intervention.</p>
                     <div class="tags">
-                        <span>Google Apps Script</span>
+                        <span>Automation Workflow</span>
                         <span>Gmail API</span>
-                        <span>Automation</span>
+                        <span>Scripting</span>
                     </div>
                 </div>
             </div>
 
             <!-- ChequeBook Pro -->
             <div class="project-card">
+                <div class="live-badge"><div class="live-dot"></div> Live Now</div>
                 <div class="project-info">
                     <h3>ChequeBook Pro System</h3>
-                    <p>A secure ledger management portal with deep bank integration tracking the complete lifecycle of cheques—from initial record and placement to clearing and bounce tracking.</p>
+                    <p>An active, secure ledger management portal tracking the complete lifecycle of corporate cheques—from initial record and placement to clearing and bouncing.</p>
                     <div class="tags">
                         <span>MongoDB</span>
-                        <span>Bank APIs</span>
+                        <span>Bank Integration</span>
                         <span>Full-Stack Web</span>
                     </div>
                 </div>
@@ -428,11 +478,12 @@
 
             <!-- Mail Ticket -->
             <div class="project-card">
+                <div class="live-badge"><div class="live-dot"></div> Live Now</div>
                 <div class="project-info">
                     <h3>Mail Ticket & Case Management</h3>
-                    <p>An enterprise ticketing system integrated seamlessly with Gmail. Features custom HTML sidebars to track, categorize, and resolve manufacturer and supplier inquiries.</p>
+                    <p>A live enterprise ticketing system integrated deeply into web pipelines to track, categorize, and resolve daily manufacturer and supplier inquiries.</p>
                     <div class="tags">
-                        <span>Google Apps Script</span>
+                        <span>API Integration</span>
                         <span>HTML/CSS/JS</span>
                         <span>UI/UX</span>
                     </div>
@@ -444,20 +495,16 @@
 
     <section id="contact">
         <h2 class="section-title">Get In Touch</h2>
-        <div class="contact-form">
-            <form action="#" method="POST" onsubmit="event.preventDefault();">
-                <div class="form-group">
-                    <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea rows="5" placeholder="Your Message" required></textarea>
-                </div>
-                <!-- Custom button spelling as requested -->
-                <button type="submit" class="btn" style="width: 100%;">submited</button>
-            </form>
+        <div class="contact-container">
+            <p>Ready to collaborate or discuss a custom solution? Reach out directly via call or WhatsApp.</p>
+            <div class="contact-actions">
+                <a href="tel:+916261942299" class="btn">
+                    <i class="fas fa-phone-alt"></i> Call: 6261942299
+                </a>
+                <a href="https://wa.me/916261942299" class="btn btn-whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> WhatsApp Me
+                </a>
+            </div>
         </div>
     </section>
 
@@ -465,7 +512,7 @@
         <div class="social-links">
             <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="#" target="_blank"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/916261942299" target="_blank"><i class="fab fa-whatsapp"></i></a>
         </div>
         <p>&copy; 2026 Er. Harsh Ganjir. All rights reserved.</p>
     </footer>
