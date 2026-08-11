@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found · GitHub Pages</title>
+    
+    <!-- Official Inline Modern SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d1117'/%3E%3Cpath d='M30,35 L45,50 L30,65 M52,65 L70,65' stroke='%2358a6ff' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+
     <style>
-        /* Professional Minimalist Layout */
+        /* Professional Premium Minimalist Layout */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,112 +28,171 @@
             color: #c9d1d9;
         }
 
-        /* Subtle professional background grid effect */
+        /* Subtle professional background grid layer */
         .bg-grid {
             position: absolute;
             width: 120%;
             height: 120%;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
             background-position: center;
             z-index: 1;
-            transition: transform 0.2s ease-out;
+            pointer-events: none;
+        }
+
+        /* Floating Element Canvas Context Layout */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .container {
             text-align: center;
             z-index: 10;
-            max-width: 450px;
-            padding: 20px;
+            max-width: 480px;
+            padding: 30px;
+            background: rgba(13, 17, 23, 0.7);
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
         }
 
-        /* Clean Animated 404 Header */
+        /* Clean Animated 404 Header Layout */
         .error-code {
-            font-size: 8rem;
+            font-size: 8.5rem;
             font-weight: 600;
             color: #f0f6fc;
             line-height: 1;
-            margin-bottom: 10px;
-            letter-spacing: -2px;
-            animation: soft-pulse 4s infinite ease-in-out;
+            margin-bottom: 12px;
+            letter-spacing: -3px;
+            animation: soft-pulse 5s infinite ease-in-out;
+            user-select: none;
         }
 
         .error-title {
             font-size: 1.5rem;
-            font-weight: 400;
-            color: #8b949e;
-            margin-bottom: 25px;
+            font-weight: 500;
+            color: #58a6ff; /* Enterprise Blue Accent Text */
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
         }
 
         .error-message {
             font-size: 1rem;
             color: #8b949e;
             line-height: 1.6;
-            margin-bottom: 35px;
-        }
-
-        /* Official GitHub Style Action Button */
-        .home-btn {
-            display: inline-block;
-            background-color: #21262d;
-            border: 1px solid rgba(240, 246, 252, 0.1);
-            color: #c9d1d9;
-            padding: 10px 20px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background-color 0.2s, border-color 0.2s;
-            cursor: pointer;
-        }
-
-        .home-btn:hover {
-            background-color: #30363d;
-            border-color: #8b949e;
         }
 
         /* Professional Animation Keyframes */
         @keyframes soft-pulse {
             0%, 100% {
                 transform: scale(1);
-                text-shadow: 0 0 0px rgba(240, 246, 252, 0);
+                text-shadow: 0 0 0px rgba(88, 166, 255, 0);
             }
             50% {
-                transform: scale(1.02);
-                text-shadow: 0 0 20px rgba(240, 246, 252, 0.15);
+                transform: scale(1.015);
+                text-shadow: 0 0 30px rgba(88, 166, 255, 0.15);
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Smooth background grid layer -->
+    <!-- Smooth background structural layers -->
     <div class="bg-grid" id="grid"></div>
+    <canvas id="particle-canvas"></canvas>
 
     <div class="container">
         <!-- Main animated status code -->
         <div class="error-code">404</div>
         
         <!-- Official status titles -->
-        <div class="error-title">Page not found</div>
+        <div class="error-title">HTTP Lost Entity Route</div>
         <p class="error-message">
-            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+            The target system module layout or page resource item could not be located. It might have been permanently migrated or dropped.
         </p>
-
-        <!-- Dynamic redirection button (Change '/' to your actual homepage link) -->
-        <a href="/" class="home-btn">Return to home</a>
     </div>
 
     <script>
-        // Adds a highly premium, subtle parity movement to the grid background
+        // Interactive Matrix: Parallax effect for the structural grid background layer
         const grid = document.getElementById('grid');
+        let mouseX = 0, mouseY = 0;
+        
         window.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.clientX) / 50;
-            const y = (window.innerHeight / 2 - e.clientY) / 50;
-            grid.style.transform = `translate(${x}px, ${y}px)`;
+            mouseX = (window.innerWidth / 2 - e.clientX) / 60;
+            mouseY = (window.innerHeight / 2 - e.clientY) / 60;
+            grid.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
         });
+
+        // Interactive Matrix: High-end floating particle network context engine 
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 28;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class DataParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height; // Spread initially across the screen
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 2.5 + 1;
+                this.speedY = Math.random() * 0.4 + 0.15;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.alpha = Math.random() * 0.4 + 0.1;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + (mouseX * 0.05); // Attuned interactively with mouse movements
+
+                // Loop element seamlessly
+                if (this.y < -20 || this.x < -20 || this.x > canvas.width + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(88, 166, 255, ${this.alpha})`; // Elegant blueprint blue nodes
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize particle array
+        for(let i = 0; i < particleCount; i++) {
+            particles.push(new DataParticle());
+        }
+
+        // Main rendering cycle loop animation layout
+        function renderLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for(let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(renderLoop);
+        }
+        renderLoop();
     </script>
 </body>
 </html>
