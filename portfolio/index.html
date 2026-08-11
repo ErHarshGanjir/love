@@ -12,6 +12,7 @@
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --accent-color: #38bdf8;
+            --accent-hover: #0284c7;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -105,7 +106,7 @@
             color: var(--text-muted);
             font-size: 1.1rem;
             margin-bottom: 2rem;
-            max-width: 600px;
+            max-width: 650px;
         }
 
         .hero-image {
@@ -132,11 +133,14 @@
             text-decoration: none;
             font-weight: 600;
             transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
         }
 
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+            background-color: var(--accent-hover);
         }
 
         /* Sections General */
@@ -161,7 +165,7 @@
             border-radius: 2px;
         }
 
-        /* About & Skills */
+        /* Skills */
         .skills-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -179,6 +183,7 @@
 
         .skill-card:hover {
             transform: translateY(-5px);
+            border-color: var(--accent-color);
         }
 
         .skill-card i {
@@ -187,19 +192,10 @@
             margin-bottom: 1rem;
         }
 
-        .skill-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
         /* Projects Section */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
         }
 
@@ -209,25 +205,34 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         .project-info {
             padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-info h3 {
             margin-bottom: 0.5rem;
-            color: var(--text-main);
+            color: var(--accent-color);
+            font-size: 1.3rem;
         }
 
         .project-info p {
             color: var(--text-muted);
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
+            flex-grow: 1;
         }
 
         .tags {
@@ -241,8 +246,37 @@
             color: var(--accent-color);
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
         }
 
         /* Footer */
@@ -270,12 +304,6 @@
             color: var(--accent-color);
         }
 
-        footer p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Design */
         @media (max-width: 968px) {
             .hero-container {
                 flex-direction: column-reverse;
@@ -290,7 +318,7 @@
                 height: 250px;
             }
             .nav-links {
-                display: none; /* Can be expanded into a mobile menu later */
+                display: none;
             }
         }
     </style>
@@ -307,12 +335,12 @@
         </ul>
     </nav>
 
-    <header>
+    <header id="about">
         <div class="hero-container">
             <div class="hero-text">
                 <h1>Hi, I'm Harsh Ganjir</h1>
                 <h2>Full-Stack Developer & Automation Engineer</h2>
-                <p>I build robust web applications, design custom database schemas, and engineer advanced automation systems that streamline business operations and scale workflows seamlessly.</p>
+                <p>Bridging the gap between technical execution and business strategy. With a foundation in B.Tech Information Technology and currently in my fourth semester of an MBA, I build robust web applications, engineer advanced automation systems, and design custom ERP and database solutions that scale wholesale and retail workflows seamlessly.</p>
                 <a href="#projects" class="btn">View My Work</a>
             </div>
             <div class="hero-image">
@@ -331,13 +359,13 @@
             </div>
             <div class="skill-card">
                 <i class="fas fa-robot"></i>
-                <h3>Workflow Automation</h3>
-                <p>Building tailored Google Apps Script ecosystems, custom email ticket handling pipelines, and automated notification setups.</p>
+                <h3>Business Automation</h3>
+                <p>Building tailored Google Apps Script ecosystems, WhatsApp API bots, and automated email processing setups.</p>
             </div>
             <div class="skill-card">
                 <i class="fas fa-database"></i>
                 <h3>Data Architecture</h3>
-                <p>Designing structures in MongoDB alongside building complex, macro-driven VBA systems for massive data sets.</p>
+                <p>Designing structures in MongoDB alongside building complex, macro-driven VBA systems for large-scale data management.</p>
             </div>
         </div>
     </section>
@@ -345,43 +373,95 @@
     <section id="projects">
         <h2 class="section-title">Featured Projects</h2>
         <div class="projects-grid">
+            
+            <!-- WhatsApp Bot -->
             <div class="project-card">
                 <div class="project-info">
-                    <h3>Mail Ticket Management System</h3>
-                    <p>An enterprise-focused ticketing system integrated deeply with Gmail to track, categorize, and resolve automated manufacturer inquiries.</p>
+                    <h3>WhatsApp Bot & API Integration</h3>
+                    <p>A dynamic communication tool leveraging the WhatsApp API to automate client interactions, handle real-time queries, and streamline messaging workflows for business operations.</p>
                     <div class="tags">
-                        <span>Google Apps Script</span>
+                        <span>WhatsApp API</span>
                         <span>JavaScript</span>
-                        <span>HTML API</span>
+                        <span>Node.js</span>
                     </div>
                 </div>
             </div>
+
+            <!-- H Book -->
             <div class="project-card">
                 <div class="project-info">
-                    <h3>ChequeBook Pro Portal</h3>
-                    <p>A secure internal banking and ledger management web portal designed to monitor, track, and clear enterprise payment sequences.</p>
+                    <h3>[H-Book] Cloud Payroll Portal</h3>
+                    <p>A comprehensive cloud-based HR portal built to manage staff attendance, daily shift logs, and execute complex custom salary calculation algorithms for large teams.</p>
                     <div class="tags">
-                        <span>Full-Stack Web</span>
+                        <span>Web Portal</span>
                         <span>Database Design</span>
+                        <span>VBA / Macros</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Robo Post -->
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>[Robo Post] Statement Mail Auto</h3>
+                    <p>An automated mailing architecture designed to instantly generate, format, and dispatch critical statement emails to clients and vendors without manual intervention.</p>
+                    <div class="tags">
+                        <span>Google Apps Script</span>
+                        <span>Gmail API</span>
+                        <span>Automation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ChequeBook Pro -->
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>ChequeBook Pro System</h3>
+                    <p>A secure ledger management portal with deep bank integration tracking the complete lifecycle of cheques—from initial record and placement to clearing and bounce tracking.</p>
+                    <div class="tags">
+                        <span>MongoDB</span>
+                        <span>Bank APIs</span>
+                        <span>Full-Stack Web</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mail Ticket -->
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Mail Ticket & Case Management</h3>
+                    <p>An enterprise ticketing system integrated seamlessly with Gmail. Features custom HTML sidebars to track, categorize, and resolve manufacturer and supplier inquiries.</p>
+                    <div class="tags">
+                        <span>Google Apps Script</span>
+                        <span>HTML/CSS/JS</span>
                         <span>UI/UX</span>
                     </div>
                 </div>
             </div>
-            <div class="project-card">
-                <div class="project-info">
-                    <h3>Attendance & Payroll Engine</h3>
-                    <p>A robust data-driven application built to manage comprehensive tracking, daily shift logs, and custom salary algorithms for large-scale operations.</p>
-                    <div class="tags">
-                        <span>VBA / Excel Advanced</span>
-                        <span>Automation</span>
-                        <span>Data Analytics</span>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </section>
 
-    <footer id="contact">
+    <section id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-form">
+            <form action="#" method="POST" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <!-- Custom button spelling as requested -->
+                <button type="submit" class="btn" style="width: 100%;">submited</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
         <div class="social-links">
             <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
