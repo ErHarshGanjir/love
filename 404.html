@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NONONO</title>
+    <title>Page Not Found · GitHub Pages</title>
     <style>
-        /* Smooth, retro-styled canvas configuration */
+        /* Professional Minimalist Layout */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,150 +16,120 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #2b1055;
-            /* Funky warm 70s gradient pattern background */
-            background: radial-gradient(circle at center, #4c1c93 0%, #1a0636 100%);
-            font-family: 'Arial Black', Impact, sans-serif;
+            background-color: #0d1117; /* GitHub Dark Neutral */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: #c9d1d9;
         }
 
-        .groove-container {
+        /* Subtle professional background grid effect */
+        .bg-grid {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            z-index: 1;
+            transition: transform 0.2s ease-out;
+        }
+
+        .container {
             text-align: center;
             z-index: 10;
+            max-width: 450px;
+            padding: 20px;
         }
 
-        /* Thick, bubbly 1970s style text layers */
-        .bubbly-no {
-            font-size: 10vw;
-            color: #ffbe0b;
-            text-transform: uppercase;
+        /* Clean Animated 404 Header */
+        .error-code {
+            font-size: 8rem;
+            font-weight: 600;
+            color: #f0f6fc;
+            line-height: 1;
+            margin-bottom: 10px;
             letter-spacing: -2px;
-            /* Layered retro pop art shadows */
-            text-shadow: 
-                4px 4px 0px #ff006e, 
-                8px 8px 0px #3a86ff,
-                12px 12px 0px #8338ec;
-            animation: wavy-groove 2.5s infinite ease-in-out;
-            user-select: none;
+            animation: soft-pulse 4s infinite ease-in-out;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #8b949e;
+            margin-bottom: 25px;
+        }
+
+        .error-message {
+            font-size: 1rem;
+            color: #8b949e;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* Official GitHub Style Action Button */
+        .home-btn {
             display: inline-block;
-        }
-
-        /* Secondary groovy text line */
-        .sub-tag {
-            font-size: 1.8rem;
-            color: #fb5607;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            margin-top: -10px;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 0px #fff;
-            animation: text-swivel 3s infinite ease-in-out;
-        }
-
-        /* Funky rounded disco button */
-        .dance-btn {
-            background-color: #ff006e;
-            border: 5px solid #fff;
-            color: #fff;
-            padding: 18px 45px;
-            font-size: 1.4rem;
-            font-family: inherit;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 50px;
+            background-color: #21262d;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            color: #c9d1d9;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s, border-color 0.2s;
             cursor: pointer;
-            box-shadow: 0 10px 0px #8338ec, 0 15px 25px rgba(0,0,0,0.4);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
 
-        .dance-btn:hover {
-            background-color: #3a86ff;
-            transform: translateY(2px);
-            box-shadow: 0 8px 0px #8338ec, 0 10px 20px rgba(0,0,0,0.4);
+        .home-btn:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
         }
 
-        .dance-btn:active {
-            transform: translateY(10px);
-            box-shadow: 0 0px 0px #8338ec, 0 5px 10px rgba(0,0,0,0.4);
-        }
-
-        /* Floating disco pop stars */
-        .pop-star {
-            position: absolute;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffbe0b;
-            pointer-events: none;
-            user-select: none;
-            animation: float-up-fade 2s forwards cubic-bezier(0.1, 0.8, 0.3, 1);
-            text-shadow: 2px 2px 0px #ff006e;
-            background: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            border: 3px solid #1a0636;
-        }
-
-        /* Funky Wavy Animations */
-        @keyframes wavy-groove {
-            0%, 100% { transform: translateY(0) scale(1) rotate(-3deg); }
-            50% { transform: translateY(-20px) scale(1.05) rotate(3deg); }
-        }
-
-        @keyframes text-swivel {
-            0%, 100% { transform: scale(0.95) rotate(1deg); color: #fb5607; }
-            50% { transform: scale(1.05) rotate(-1deg); color: #ffbe0b; }
-        }
-
-        @keyframes float-up-fade {
-            0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
-            100% { transform: translate(var(--mx), var(--my)) scale(1.3) rotate(45deg); opacity: 0; }
+        /* Professional Animation Keyframes */
+        @keyframes soft-pulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 0px rgba(240, 246, 252, 0);
+            }
+            50% {
+                transform: scale(1.02);
+                text-shadow: 0 0 20px rgba(240, 246, 252, 0.15);
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="groove-container">
-        <!-- Thick layered retro headline -->
-        <div class="bubbly-no">NONONO</div>
+    <!-- Smooth background grid layer -->
+    <div class="bg-grid" id="grid"></div>
+
+    <div class="container">
+        <!-- Main animated status code -->
+        <div class="error-code">404</div>
         
-        <!-- Smooth dancing subtitle -->
-        <div class="sub-tag">Wrong Groove</div>
-        
-        <!-- Interactive internal action layout button -->
-        <button class="dance-btn" onclick="dropTheBass(event)">NO</button>
+        <!-- Official status titles -->
+        <div class="error-title">Page not found</div>
+        <p class="error-message">
+            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        </p>
+
+        <!-- Dynamic redirection button (Change '/' to your actual homepage link) -->
+        <a href="/" class="home-btn">Return to home</a>
     </div>
 
     <script>
-        // Spawns interactive retro-pop bubbles directly at the mouse click location
-        function dropTheBass(event) {
-            const colors = ['#ffbe0b', '#fb5607', '#ff006e', '#8338ec', '#3a86ff'];
-            
-            // Generate a small burst of floating objects nearby
-            for (let i = 0; i < 6; i++) {
-                const star = document.createElement('div');
-                star.classList.add('pop-star');
-                star.innerText = "NO!";
-                
-                // Position directly over the button area
-                star.style.left = (event.clientX - 30) + 'px';
-                star.style.top = (event.clientY - 20) + 'px';
-                
-                // Pick random colors and directions
-                star.style.color = colors[Math.floor(Math.random() * colors.length)];
-                
-                const moveX = (Math.random() - 0.5) * 400;
-                const moveY = (Math.random() * -300) - 50; 
-                star.style.setProperty('--mx', moveX + 'px');
-                star.style.setProperty('--my', moveY + 'px');
-                
-                document.body.appendChild(star);
-                
-                // Cleanup element
-                setTimeout(() => { star.remove(); }, 2000);
-            }
-        }
+        // Adds a highly premium, subtle parity movement to the grid background
+        const grid = document.getElementById('grid');
+        window.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 50;
+            const y = (window.innerHeight / 2 - e.clientY) / 50;
+            grid.style.transform = `translate(${x}px, ${y}px)`;
+        });
     </script>
 </body>
 </html>
