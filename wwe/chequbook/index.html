@@ -1,93 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ChequeBook Pro</title>
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Maintenance</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a; /* Deep elegant slate background */
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    /* Animated Abstract Geometric Background Elements */
+    .bg-glow-1, .bg-glow-2 {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 1;
+      opacity: 0.15;
+    }
+    .bg-glow-1 {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: #3b82f6; /* Modern Blue */
+    }
+    .bg-glow-2 {
+      bottom: -10%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: #6366f1; /* Modern Indigo */
+    }
 
-    <!-- App icon -->
-    <link rel="icon" type="image/png" href="ChequeBook favicon.png">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
+    /* Premium Glassmorphism Card Container */
+    .card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 48px 32px;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            box-sizing: border-box;
-            background: #fff;
-        }
-        
-        #content-frame {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow-y: scroll; 
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
+    /* Dynamic Graphical Maintenance Icon */
+    .graphic-icon-box {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 32px auto;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .graphic-icon-box svg {
+      width: 40px;
+      height: 40px;
+      fill: none;
+      stroke: #3b82f6;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .pulse-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid rgba(59, 130, 246, 0.4);
+      border-radius: 20px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.25); opacity: 0; }
+    }
+
+    /* Typography & Hierarchy */
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #94a3b8; /* Soft muted text color */
+      margin-bottom: 12px;
+    }
+    p.accent {
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-top: 20px;
+    }
+
+    /* Sleek Linear Progress Loader Bar */
+    .progress-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 9999px;
+      height: 6px;
+      width: 100%;
+      margin: 32px 0 8px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+      border-radius: 9999px;
+      height: 100%;
+      width: 40%;
+      position: absolute;
+      animation: shift 2s infinite linear;
+    }
+
+    @keyframes shift {
+      0% { left: -40%; }
+      50% { width: 60%; }
+      100% { left: 100%; }
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      margin-top: 16px;
+    }
+  </style>
 </head>
-
 <body>
 
-    <!-- i fream url               https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec     -->
-    <iframe
-        id="content-frame"
-        allow="clipboard-read; clipboard-write"
-        src="https://script.google.com/macros/s/AKfycbx2KVyvFiSVQE5EF8IDl-3BiL7RN2uW4QcSNiP7g25wEP6GYzfaJWWmtVTwckEYnCsF7w/exec">
-    </iframe>
+  <!-- Blurred vector background patterns -->
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
 
-    <button id="installBtn" style="
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  padding: 10px 16px;
-  background: #0f172a;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 999999;
-  display: none;">
-  ⬇ Install App
-</button>
+  <!-- Main Corporate Presentation Card -->
+  <div class="card">
+    <div class="graphic-icon-box">
+      <div class="pulse-ring"></div>
+      <!-- Premium Vector Shield/Security Icon -->
+      <svg viewBox="0 0 24 24">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+    </div>
 
-
-    <!-- Service worker registration -->
-<script>
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
-
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  });
-});
-</script>
-
+    <h1>System Maintenance</h1>
+    <p>Currently, the website is experiencing operational issues and is not working properly.</p>
+    <p>This maintenance mode is crucial to protect and safeguard our web portal and core database. We are also actively resolving a database deadlock to ensure long-term stability.</p>
+    
+    <div class="progress-track">
+      <div class="progress-bar"></div>
+    </div>
+    
+    <p class="accent">This process may take some time.</p>
+    <span class="status-badge">Optimization In Progress</span>
+  </div>
 
 </body>
 </html>
