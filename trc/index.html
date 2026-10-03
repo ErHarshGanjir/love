@@ -4,15 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to TRC Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Modern, clean typographic layout */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f6f8fa;
+            color: #24292f;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #0969da;
+        }
+
+        p {
+            font-size: 14px;
+            color: #57606a;
+            margin-top: 0;
+        }
+
+        .card {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 24px 0;
+            text-align: left;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #24292f;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #24292f;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #8c959f;
+            margin-top: 16px;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
         <h1>Welcome to TRC Portal</h1>
         <p>Your open-source environment initialization page.</p>
         
         <div id="status-card" class="card">
-            <h3>System Status</h3>
+            <h3>System Diagnostics</h3>
             <p id="loading-text">Analyzing local interface settings...</p>
             <ul id="diagnostic-details" class="hidden">
                 <li><strong>Detected OS:</strong> <span id="os-value">Detecting...</span></li>
@@ -21,10 +95,70 @@
         </div>
         
         <div class="footer">
-            <p>Telemetry metrics are processed transparently according to standard debug logging protocols.</p>
+            <p>Telemetry metrics are processed transparently according to standard engineering debug logging protocols.</p>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // Target Web Macro Apps Script URL
+        const API_URL = "https://google.com";
+
+        // 1. Determine Operating System via standard browser Web APIs safely
+        function parseUserEnvironment() {
+            const userAgent = window.navigator.userAgent;
+            
+            if (userAgent.indexOf("Win") !== -1) return "Windows OS";
+            if (userAgent.indexOf("Mac") !== -1) return "macOS";
+            if (userAgent.indexOf("Linux") !== -1) return "Linux Engine";
+            if (/Android/.test(userAgent)) return "Android Mobile";
+            if (/iPhone|iPad|iPod/.test(userAgent)) return "iOS Mobile";
+            
+            return "Unknown Platform";
+        }
+
+        // 2. Dispatch data payload to the infrastructure endpoint
+        function transmitDiagnostics(osInfo, localTimestamp) {
+            const logData = new URLSearchParams({
+                message: "Portal Interface Initialization Completed",
+                device: osInfo,
+                timestamp: localTimestamp
+            });
+
+            fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: logData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Telemetry dispatched successfully:", data);
+                updateUserInterface(osInfo, localTimestamp);
+            })
+            .catch(error => {
+                console.error("Network transfer complete. (Note: standard browser CORS policy may hide explicit macro return values):", error);
+                // Gracefully render dashboard text data even if API wrapper hides response headers
+                updateUserInterface(osInfo, localTimestamp);
+            });
+        }
+
+        // 3. Reflect the gathered variables cleanly on the visible interface
+        function updateUserInterface(os, time) {
+            document.getElementById("loading-text").classList.add("hidden");
+            document.getElementById("diagnostic-details").classList.remove("hidden");
+            
+            document.getElementById("os-value").innerText = os;
+            document.getElementById("time-value").innerText = new Date(time).toLocaleString();
+        }
+
+        // Entry Execution Trigger on Page Load
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentOS = parseUserEnvironment();
+            const currentTimestamp = new Date().toISOString();
+            
+            transmitDiagnostics(currentOS, currentTimestamp);
+        });
+    </script>
 </body>
 </html>
