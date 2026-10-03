@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to TRC Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to TRC Portal</h1>
+        <p>Your open-source environment initialization page.</p>
+        
+        <div id="status-card" class="card">
+            <h3>System Status</h3>
+            <p id="loading-text">Analyzing local interface settings...</p>
+            <ul id="diagnostic-details" class="hidden">
+                <li><strong>Detected OS:</strong> <span id="os-value">Detecting...</span></li>
+                <li><strong>Session Time:</strong> <span id="time-value">Processing...</span></li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Telemetry metrics are processed transparently according to standard debug logging protocols.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
