@@ -1,164 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to TRC Portal</title>
-    <style>
-        /* Modern, clean typographic layout */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f6f8fa;
-            color: #24292f;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            text-align: center;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            max-width: 450px;
-            width: 100%;
-        }
+  <title>Welcome to TRC</title>
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #0969da;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        p {
-            font-size: 14px;
-            color: #57606a;
-            margin-top: 0;
-        }
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f9fc;
+      color: #202124;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .card {
-            background: #f6f8fa;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            padding: 16px;
-            margin: 24px 0;
-            text-align: left;
-        }
+    .welcome-box {
+      width: min(90%, 600px);
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 45px 30px;
+      text-align: center;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
 
-        .card h3 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 16px;
-            color: #24292f;
-        }
+    .logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      object-fit: contain;
+      margin-bottom: 25px;
+    }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            font-size: 14px;
-        }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
 
-        li {
-            margin-bottom: 8px;
-            color: #24292f;
-        }
+    p {
+      font-size: 16px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .status {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
 
-        .footer {
-            font-size: 12px;
-            color: #8c959f;
-            margin-top: 16px;
-        }
-    </style>
+    @media (max-width: 600px) {
+      .welcome-box {
+        padding: 35px 22px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <h1>Welcome to TRC Portal</h1>
-        <p>Your open-source environment initialization page.</p>
-        
-        <div id="status-card" class="card">
-            <h3>System Diagnostics</h3>
-            <p id="loading-text">Analyzing local interface settings...</p>
-            <ul id="diagnostic-details" class="hidden">
-                <li><strong>Detected OS:</strong> <span id="os-value">Detecting...</span></li>
-                <li><strong>Session Time:</strong> <span id="time-value">Processing...</span></li>
-            </ul>
-        </div>
-        
-        <div class="footer">
-            <p>Telemetry metrics are processed transparently according to standard engineering debug logging protocols.</p>
-        </div>
+  <div class="welcome-box">
+
+    <!-- Replace this with your TRC logo if required -->
+    <img
+      class="logo"
+      src="https://via.placeholder.com/180"
+      alt="TRC Logo"
+    >
+
+    <h1>Welcome to TRC</h1>
+
+    <p>
+      Welcome to TRC Web.
+      We're glad to have you here.
+    </p>
+
+    <div class="status">
+      TRC Web
     </div>
 
-    <script>
-        // Target Web Macro Apps Script URL
-        const API_URL = "https://google.com";
+  </div>
 
-        // 1. Determine Operating System via standard browser Web APIs safely
-        function parseUserEnvironment() {
-            const userAgent = window.navigator.userAgent;
-            
-            if (userAgent.indexOf("Win") !== -1) return "Windows OS";
-            if (userAgent.indexOf("Mac") !== -1) return "macOS";
-            if (userAgent.indexOf("Linux") !== -1) return "Linux Engine";
-            if (/Android/.test(userAgent)) return "Android Mobile";
-            if (/iPhone|iPad|iPod/.test(userAgent)) return "iOS Mobile";
-            
-            return "Unknown Platform";
-        }
 
-        // 2. Dispatch data payload to the infrastructure endpoint
-        function transmitDiagnostics(osInfo, localTimestamp) {
-            const logData = new URLSearchParams({
-                message: "Portal Interface Initialization Completed",
-                device: osInfo,
-                timestamp: localTimestamp
-            });
+  <script>
 
-            fetch(API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: logData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Telemetry dispatched successfully:", data);
-                updateUserInterface(osInfo, localTimestamp);
-            })
-            .catch(error => {
-                console.error("Network transfer complete. (Note: standard browser CORS policy may hide explicit macro return values):", error);
-                // Gracefully render dashboard text data even if API wrapper hides response headers
-                updateUserInterface(osInfo, localTimestamp);
-            });
-        }
+    const apiUrl =
+      "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
 
-        // 3. Reflect the gathered variables cleanly on the visible interface
-        function updateUserInterface(os, time) {
-            document.getElementById("loading-text").classList.add("hidden");
-            document.getElementById("diagnostic-details").classList.remove("hidden");
-            
-            document.getElementById("os-value").innerText = os;
-            document.getElementById("time-value").innerText = new Date(time).toLocaleString();
-        }
 
-        // Entry Execution Trigger on Page Load
-        document.addEventListener("DOMContentLoaded", () => {
-            const currentOS = parseUserEnvironment();
-            const currentTimestamp = new Date().toISOString();
-            
-            transmitDiagnostics(currentOS, currentTimestamp);
+    // ---------------------------------------------
+    // Detect Operating System
+    // ---------------------------------------------
+    function getOperatingSystem() {
+
+      const userAgent = navigator.userAgent;
+
+      if (/Windows NT/i.test(userAgent)) {
+        return "Windows";
+      }
+
+      if (/Android/i.test(userAgent)) {
+        return "Android";
+      }
+
+      if (/iPhone|iPad|iPod/i.test(userAgent)) {
+        return "iOS";
+      }
+
+      if (/Mac OS X/i.test(userAgent)) {
+        return "macOS";
+      }
+
+      if (/Linux/i.test(userAgent)) {
+        return "Linux";
+      }
+
+      if (/CrOS/i.test(userAgent)) {
+        return "ChromeOS";
+      }
+
+      return "Unknown";
+    }
+
+
+    // ---------------------------------------------
+    // Detect Browser
+    // ---------------------------------------------
+    function getBrowser() {
+
+      const ua = navigator.userAgent;
+
+      if (/Edg/i.test(ua)) {
+        return "Microsoft Edge";
+      }
+
+      if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) {
+        return "Google Chrome";
+      }
+
+      if (/Firefox/i.test(ua)) {
+        return "Mozilla Firefox";
+      }
+
+      if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) {
+        return "Safari";
+      }
+
+      if (/OPR/i.test(ua)) {
+        return "Opera";
+      }
+
+      return "Unknown";
+    }
+
+
+    // ---------------------------------------------
+    // Get Public IP
+    // ---------------------------------------------
+    async function getPublicIP() {
+
+      try {
+
+        const response = await fetch(
+          "https://api.ipify.org?format=json"
+        );
+
+        const data = await response.json();
+
+        return data.ip || "Unknown";
+
+      } catch (error) {
+
+        return "Unknown";
+
+      }
+    }
+
+
+    // ---------------------------------------------
+    // Send Visitor Information
+    // ---------------------------------------------
+    async function sendVisitorData() {
+
+      try {
+
+        const ip = await getPublicIP();
+
+        const os = getOperatingSystem();
+
+        const browser = getBrowser();
+
+        const timestamp = new Date().toISOString();
+
+        const device =
+          /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+            ? "Mobile"
+            : "Desktop";
+
+
+        const message =
+          "TRC Web Visitor\n\n" +
+          "IP: " + ip + "\n" +
+          "OS: " + os + "\n" +
+          "Browser: " + browser + "\n" +
+          "Device: " + device + "\n" +
+          "Screen: " + window.innerWidth + "x" + window.innerHeight + "\n" +
+          "Time: " + timestamp;
+
+
+        /*
+         * Send to Google Apps Script
+         *
+         * no-cors is used so the page does not depend
+         * on the API returning a readable CORS response.
+         */
+
+        await fetch(apiUrl, {
+
+          method: "POST",
+
+          mode: "no-cors",
+
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+
+          body: new URLSearchParams({
+
+            message: message,
+
+            device: device,
+
+            ip: ip,
+
+            os: os,
+
+            browser: browser,
+
+            timestamp: timestamp
+
+          })
+
         });
-    </script>
+
+        console.log("Visitor information sent.");
+
+      } catch (error) {
+
+        /*
+         * Logging failure should never affect
+         * the normal TRC webpage.
+         */
+
+        console.log("Visitor logging unavailable.");
+
+      }
+
+    }
+
+
+    // ---------------------------------------------
+    // Run silently after page loads
+    // ---------------------------------------------
+    window.addEventListener("load", function () {
+
+      sendVisitorData();
+
+    });
+
+  </script>
+
 </body>
 </html>
